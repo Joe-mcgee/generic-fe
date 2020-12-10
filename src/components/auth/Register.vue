@@ -125,7 +125,7 @@ import { bus } from '@/main.js'
       ],
       checkbox: false,
     }),
-    created() {
+    async created() {
       bus.$on('registerSuccess', (event) => {
         this.registerSuccess = true
         console.log(event)
@@ -133,7 +133,11 @@ import { bus } from '@/main.js'
       bus.$on('registerFailure', (event) => {
         console.log(event)
         this.registerFailure = true
-      }) 
+      })
+
+      let response = await authService.getMe()
+      console.log(response)
+
     },
     methods: {
       async validate () {
