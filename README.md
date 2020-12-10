@@ -4,6 +4,7 @@
 ```
 npm install
 ```
+```cp .env.example .env``` fill out
 
 ### Compiles and hot-reloads for development
 ```
