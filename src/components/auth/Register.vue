@@ -37,8 +37,9 @@
 
     <v-text-field
       v-if="!editMode"
+      v-model="rePassword"
       :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
+      :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
       :type="show2 ? 'text' : 'password'"
       name="input-10-2"
       label="Repeat Password"
@@ -106,6 +107,7 @@ import { bus } from '@/main.js'
       show1: false,
       show2: false,
       password: '',
+      rePassword: '',
       passwordRules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
@@ -148,6 +150,11 @@ import { bus } from '@/main.js'
 
       }
 
+    },
+    computed: {
+      passwordMatch() {
+        return () => (this.password === this.rePassword) || 'Password must match'
+      }
     },
     methods: {
       async validate () {
