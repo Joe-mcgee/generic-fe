@@ -5,6 +5,8 @@ import Register from '@/components/auth/Register.vue'
 import Login from '@/components/auth/Login.vue'
 import Logout from '@/components/auth/Logout.vue'
 import Me from '@/components/auth/Me.vue'
+import ForgotPassword from '@/components/auth/ForgotPassword.vue'
+import ResetPassword from '@/components/auth/ResetPassword.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,6 +19,16 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register
+  },
+  {
+    path: '/forgotpassword',
+    name: 'forgotpassword',
+    component: ForgotPassword
+  },
+  {
+    path: '/resetpassword/:resettoken',
+    name: 'resetpassword',
+    component: ResetPassword
   },
   {
     path: '/login',

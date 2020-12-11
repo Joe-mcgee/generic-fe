@@ -52,18 +52,18 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { title: 'Register', icon: 'mdi-account-plus', link: 'register' },
-      { title: 'Login', icon: 'mdi-login', link: 'login' },
-      { title: 'Logout', icon: 'mdi-logout', link: 'logout' },
-      { title: 'Profile', icon: 'mdi-account', link: 'me' },
-      { title: 'Reset Password', icon: 'mdi-account-key', link:'updatepassword' }
+      { title: 'Register', icon: 'mdi-account-plus', link: '/register' },
+      { title: 'Login', icon: 'mdi-login', link: '/login' },
+      { title: 'Forgot Password', icon: 'mdi-lock-alert', link: '/forgotpassword' },
+      { title: 'Logout', icon: 'mdi-logout', link: '/logout' },
+      { title: 'Profile', icon: 'mdi-account', link: '/me' },
     ],
     //
   }),
   methods: {
     go(link) {
       if (this.$router.currentRoute.name !== link) {
-        this.$router.push(link)
+        this.$router.replace(link)
       }
     }
   }

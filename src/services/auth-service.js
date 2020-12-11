@@ -14,6 +14,16 @@ class AuthService {
     }
     return response.data
   }
+  async forgotPassword(data) {
+    let response = await http.post('/auth/forgotpassword/', data)
+    console.log(response)
+    return response.data
+  }
+  async resetPassword(data) {
+    let response = await http.put(`/auth/resetpassword/${data.resettoken}`, data)
+    console.log(response)
+    return response.data
+  }
   async logout() {
     let response = await http.get('/auth/logout')
     console.log(response)
