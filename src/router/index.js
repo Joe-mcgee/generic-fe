@@ -34,6 +34,11 @@ const routes = [
     component: Me
   },
   {
+    path: '/updatepassword',
+    name: 'updatepassword',
+    component: Register
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting

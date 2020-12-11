@@ -6,6 +6,7 @@
     lazy-validation
   >
     <v-text-field
+      v-if="mode !== modeOptions.EDITPASSWORD"
       v-model="name"
       :counter="10"
       :rules="nameRules"
@@ -14,6 +15,7 @@
       >{{name.length >= 1 ? name : '' }}</v-text-field>
 
     <v-text-field
+      v-if="mode !== modeOptions.EDITPASSWORD"
       v-model="email"
       :rules="emailRules"
       label="E-mail"
@@ -22,7 +24,18 @@
       >{{email.length >= 1 ? email : ''}}</v-text-field>
 
     <v-text-field
-      v-if="!editMode"
+      v-if="mode === modeOptions.EDITPASSWORD"
+      v-model="currentPassword"
+      :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'"
+      :rules="[passwordRules.required, passwordRules.min]"
+      :type="show0 ? 'text' : 'password'"
+      name="input-10-1"
+      label="Current Password"
+      @click:append="show0 = !show0"
+      ></v-text-field>
+
+    <v-text-field
+      v-if="mode !== modeOptions.EDITPROFILE"
       v-model="password"
       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[passwordRules.required, passwordRules.min]"
@@ -36,7 +49,7 @@
     
 
     <v-text-field
-      v-if="!editMode"
+      v-if="mode !== modeOptions.EDITPROFILE"
       v-model="rePassword"
       :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
@@ -50,6 +63,7 @@
     ></v-text-field>
 
     <v-select
+      v-if="mode !== modeOptions.EDITPASSWORD"
       v-model="roleSelect"
       :items="roleItems"
       item-text="state"
@@ -61,7 +75,7 @@
 
 
     <v-checkbox
-      v-if="!editMode"
+      v-if="mode === modeOptions.REGISTER"
       v-model="checkbox"
       :rules="[v => !!v || 'You must agree to continue!']"
       label="Do you agree?"
@@ -99,11 +113,18 @@ import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
     data: () => ({
-      editMode: true,
+      modeOptions: {
+        REGISTER: 'register',
+        EDITPROFILE: 'me',
+        EDITPASSWORD: 'resetpassword'
+      },
+      mode: null,
       registerSuccess: false,
       registerFailure: false,
+      show0: false,
       show1: false,
       show2: false,
+      currentPassword: '',
       password: '',
       rePassword: '',
       passwordRules: {
@@ -139,16 +160,23 @@ import { bus } from '@/main.js'
         this.registerFailure = true
       })
       console.log(this.$router.currentRoute)
-      if (this.$router.currentRoute.name == 'register') {
-          this.editMode = false
-      } else {
-        let response = await authService.getMe()
-        if (response.success == true) {
-            this.name = response.data.name
-            this.email = response.data.email
-        }
+      let response;
+      switch (this.$router.currentRoute.name) {
+        case 'register':
+          this.mode = this.modeOptions.REGISTER
+          break
+        case 'me':
+          this.mode = this.modeOptions.EDITPROFILE
+          response = await authService.getMe()
+          if (response.success == true) {
+              this.name = response.data.name
+              this.email = response.data.email
+          }
+          break
+        case 'updatepassword':
+          this.mode = this.modeOptions.EDITPASSWORD
+          break
       }
-
     },
     computed: {
       passwordMatch() {
@@ -160,21 +188,31 @@ import { bus } from '@/main.js'
         if (this.$refs.form.validate()) {
           
           let response
+          let data
           try {
-            if (this.editMode) {
-            const data = {
-              name: this.$data.name,
-              email: this.$data.email
-            }
-            response = await authService.updateDetails(data)
-            } else {
-              const data = {
-                name: this.$data.name,
-                email: this.$data.email,
-                password: this.$data.password,
-                role: this.$data.roleSelect.enum
-              }
-            response = await authService.register(data)
+            switch (this.mode) {
+              case this.modeOptions.REGISTER:
+                data = {
+                  name: this.$data.name,
+                  email: this.$data.email,
+                  password: this.$data.password,
+                  role: this.$data.roleSelect.enum
+                }
+                response = await authService.register(data)
+                break
+              case this.modeOptions.EDITPROFILE:
+                data = {
+                  name: this.$data.name,
+                  email: this.$data.email
+                }
+                response = await authService.updateDetails(data)
+                break;
+              case this.modeOptions.EDITPASSWORD:
+                data = {
+                  currentPassword: this.$data.currentPassword,
+                  newPassword: this.$data.password
+                }
+                response = await authService.updatePassword(data)
             }
           } catch (e) {
 

@@ -36,7 +36,7 @@
 
     <v-main>
       <!--  -->
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-main>
   </v-app>
 </template>
@@ -56,6 +56,7 @@ export default {
       { title: 'Login', icon: 'mdi-login', link: 'login' },
       { title: 'Logout', icon: 'mdi-logout', link: 'logout' },
       { title: 'Profile', icon: 'mdi-account', link: 'me' },
+      { title: 'Reset Password', icon: 'mdi-account-key', link:'updatepassword' }
     ],
     //
   }),
