@@ -51,14 +51,12 @@
 
     <v-select
       v-model="roleSelect"
-      :hint="`${roleSelect.state}, ${roleSelect.abbr}`"
       :items="roleItems"
       item-text="state"
       item-value="abbr"
       label="Role"
       persistent-hint
       return-object
-      single-line
     ></v-select>
 
 
@@ -101,7 +99,7 @@ import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
     data: () => ({
-      editMode: false,
+      editMode: true,
       registerSuccess: false,
       registerFailure: false,
       show1: false,
@@ -110,8 +108,7 @@ import { bus } from '@/main.js'
       rePassword: '',
       passwordRules: {
         required: value => !!value || 'Required.',
-        min: v => v.length >= 8 || 'Min 8 characters',
-        //emailMatch: () => (`The email and password you entered don't match`),
+        min: v => v.length >= 6 || 'Min 6 characters',
       },
       valid: true,
       name: '',
@@ -141,13 +138,15 @@ import { bus } from '@/main.js'
         console.log(event)
         this.registerFailure = true
       })
-
-      let response = await authService.getMe()
-      if (response.success == true) {
-          this.editMode = true
-          this.name = response.data.name
-          this.email = response.data.email
-
+      console.log(this.$router.currentRoute)
+      if (this.$router.currentRoute.name == 'register') {
+          this.editMode = false
+      } else {
+        let response = await authService.getMe()
+        if (response.success == true) {
+            this.name = response.data.name
+            this.email = response.data.email
+        }
       }
 
     },
