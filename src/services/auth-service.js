@@ -32,6 +32,16 @@ class AuthService {
     console.log(response)
     return response.data
   }
+  async updateDetails(data) {
+    console.log(VueCookies.get('token'))
+    let response = await http.put('/auth/updatedetails', data, {
+      'headers': {
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    })
+    console.log(response)
+    return response.data
+  }
 }
 
 export default new AuthService()

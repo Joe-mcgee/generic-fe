@@ -11,7 +11,7 @@
       :rules="nameRules"
       label="Name"
       required
-    ></v-text-field>
+      >{{name.length >= 1 ? name : '' }}</v-text-field>
 
     <v-text-field
       v-model="email"
@@ -19,9 +19,10 @@
       label="E-mail"
       counter
       required
-    ></v-text-field>
+      >{{email.length >= 1 ? email : ''}}</v-text-field>
 
     <v-text-field
+      v-if="!editMode"
       v-model="password"
       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[passwordRules.required, passwordRules.min]"
@@ -31,9 +32,11 @@
       hint="At least 8 characters"
       counter
       @click:append="show1 = !show1"
-    ></v-text-field>
+      ></v-text-field>
+    
 
     <v-text-field
+      v-if="!editMode"
       :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
       :rules="[passwordRules.required, passwordRules.min]"
       :type="show2 ? 'text' : 'password'"
@@ -48,7 +51,7 @@
     <v-select
       v-model="roleSelect"
       :hint="`${roleSelect.state}, ${roleSelect.abbr}`"
-      :roleItems="roleItems"
+      :items="roleItems"
       item-text="state"
       item-value="abbr"
       label="Role"
@@ -59,6 +62,7 @@
 
 
     <v-checkbox
+      v-if="!editMode"
       v-model="checkbox"
       :rules="[v => !!v || 'You must agree to continue!']"
       label="Do you agree?"
@@ -96,6 +100,7 @@ import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
     data: () => ({
+      editMode: false,
       registerSuccess: false,
       registerFailure: false,
       show1: false,
@@ -136,22 +141,35 @@ import { bus } from '@/main.js'
       })
 
       let response = await authService.getMe()
-      console.log(response)
+      if (response.success == true) {
+          this.editMode = true
+          this.name = response.data.name
+          this.email = response.data.email
+
+      }
 
     },
     methods: {
       async validate () {
         if (this.$refs.form.validate()) {
           
-          const data = {
-            name: this.$data.name,
-            email: this.$data.email,
-            password: this.$data.password,
-            role: this.$data.roleSelect.enum
-          }
           let response
           try {
+            if (this.editMode) {
+            const data = {
+              name: this.$data.name,
+              email: this.$data.email
+            }
+            response = await authService.updateDetails(data)
+            } else {
+              const data = {
+                name: this.$data.name,
+                email: this.$data.email,
+                password: this.$data.password,
+                role: this.$data.roleSelect.enum
+              }
             response = await authService.register(data)
+            }
           } catch (e) {
 
             bus.$emit('registerFailure', {})
