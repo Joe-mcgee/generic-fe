@@ -14,6 +14,11 @@ class AuthService {
     }
     return response.data
   }
+  async resendEmail(data) {
+    let response = await http.post('/auth/resendconfirmemail', data)
+    console.log(response)
+    return response.data
+  }
   async forgotPassword(data) {
     let response = await http.post('/auth/forgotpassword/', data)
     console.log(response)
@@ -35,6 +40,16 @@ class AuthService {
   async getMe() {
     console.log(VueCookies.get('token'))
     let response = await http.get('/auth/me', {
+      'headers': {
+        'Authorization': `Bearer ${VueCookies.get('token')}`
+      }
+    })
+    console.log(response)
+    return response.data
+  }
+  async deleteUser(data) {
+    console.log(VueCookies.get('token'))
+    let response = await http.delete(`/auth/me/${data.id}`, {
       'headers': {
         'Authorization': `Bearer ${VueCookies.get('token')}`
       }

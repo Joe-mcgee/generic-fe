@@ -90,6 +90,10 @@
     >
       Submit
     </v-btn>
+    
+    <DeleteUser
+      id="userId"
+      v-if="mode === modeOptions.EDITPROFILE"/>
 
   </v-form>
   <v-snackbar
@@ -109,9 +113,13 @@
   </v-container>
 </template>
 <script>
+import DeleteUser from '@/components/auth/DeleteUser.vue'
 import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
+    components: {
+      DeleteUser,
+    },
     data: () => ({
       modeOptions: {
         REGISTER: 'register',
@@ -149,6 +157,7 @@ import { bus } from '@/main.js'
         { state: 'Contributor', abbr: 'Cont', enum: 'user' },
       ],
       checkbox: false,
+      userId: null,
     }),
     async created() {
       bus.$on('registerSuccess', (event) => {
@@ -171,6 +180,7 @@ import { bus } from '@/main.js'
           if (response.success == true) {
               this.name = response.data.name
               this.email = response.data.email
+              this.userId = response.data['_id']
           }
           break
         case 'updatepassword':

@@ -53,6 +53,7 @@ export default {
     drawer: null,
     items: [
       { title: 'Register', icon: 'mdi-account-plus', link: '/register' },
+      { title: 'Resend Email', icon: 'mdi-email-receive', link: '/resendconfirmemail' },
       { title: 'Login', icon: 'mdi-login', link: '/login' },
       { title: 'Forgot Password', icon: 'mdi-lock-alert', link: '/forgotpassword' },
       { title: 'Logout', icon: 'mdi-logout', link: '/logout' },

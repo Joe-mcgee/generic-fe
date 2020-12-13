@@ -7,6 +7,7 @@ import Logout from '@/components/auth/Logout.vue'
 import Me from '@/components/auth/Me.vue'
 import ForgotPassword from '@/components/auth/ForgotPassword.vue'
 import ResetPassword from '@/components/auth/ResetPassword.vue'
+import ResendEmail from '@/components/auth/ResendEmail.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     path: '/forgotpassword',
     name: 'forgotpassword',
     component: ForgotPassword
+  },
+  {
+    path: '/resendconfirmemail',
+    name: 'resendconfirmemail',
+    component: ResendEmail,
   },
   {
     path: '/resetpassword/:resettoken',

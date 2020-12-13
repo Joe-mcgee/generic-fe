@@ -44,6 +44,7 @@
     </v-img>
   </v-card>
   <Register />
+  
   </v-container>
 </template>
 <script>
