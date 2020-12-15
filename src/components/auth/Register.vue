@@ -92,7 +92,7 @@
     </v-btn>
     
     <DeleteUser
-      id="userId"
+      :id="userId"
       v-if="mode === modeOptions.EDITPROFILE"/>
 
   </v-form>
@@ -177,6 +177,7 @@ import { bus } from '@/main.js'
         case 'me':
           this.mode = this.modeOptions.EDITPROFILE
           response = await authService.getMe()
+          console.log(response.data['_id'])
           if (response.success == true) {
               this.name = response.data.name
               this.email = response.data.email

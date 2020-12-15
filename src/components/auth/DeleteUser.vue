@@ -50,15 +50,15 @@ import { bus } from '@/main.js'
       async validate () {
           let response
           try {
+            console.log(this.$props.id)
             const data = {
-              id: this.props.id
+              id: this.$props.id
             }
             response = await authService.deleteUser(data)
           } catch (e) {
 
             bus.$emit('deleteFailure', {})
             this.$data.valid = !this.valid
-            this.$refs.form.resetValidation()
             console.log(e)
             return
           }
@@ -66,12 +66,6 @@ import { bus } from '@/main.js'
           if (response.success) {
             bus.$emit('deleteSuccess', response)
           }
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
       },
     },
   }
