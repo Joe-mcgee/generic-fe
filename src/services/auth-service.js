@@ -1,6 +1,28 @@
 import http from "@/services/http-common.js"
 import VueCookies from 'vue-cookies'
 class AuthService {
+  async googleLogin(data) {
+    let response = await http.get('/auth/google', data)
+    console.log(response)
+    if (response.data.success) {
+      console.log(response.data)
+      let googleAuth = await http.get(response.data.googleLoginUrl)
+      console.log(googleAuth)
+      console.log('some notion of setting jwt')
+    }
+    return response.data
+  }
+  async facebookLogin(data) {
+    let response = await http.get('/auth/facebook', data)
+    console.log(response)
+    if (response.data.success) {
+      console.log(response.data)
+      let facebookAuth = await http.get(response.data.facebookLoginUrl)
+      console.log(facebookAuth)
+      console.log('some notion of setting jwt')
+    }
+    return response.data
+  }
   async register(data) {
     let response = await http.post('/auth/register', data)
     console.log(response)

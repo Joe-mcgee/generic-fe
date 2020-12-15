@@ -31,6 +31,8 @@
     </v-btn>
 
   </v-form>
+    <GOAuth />
+    <FBOAuth />
   <v-snackbar
     v-model="loginSuccess"
     top
@@ -49,8 +51,15 @@
 </template>
 <script>
 import authService from '@/services/auth-service.js'
+import GOAuth from '@/components/auth/GOAuth.vue'
+import FBOAuth from '@/components/auth/FBOAuth.vue'
 import { bus } from '@/main.js'
   export default {
+    components: {
+      GOAuth,
+      FBOAuth,
+
+    },
     data: () => ({
       loginSuccess: false,
       loginFailure: false,
