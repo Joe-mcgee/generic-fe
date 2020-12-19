@@ -1,6 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
+      v-if="showNavigation"
       v-model="drawer"
       mobile-breakpoint="500"
       bottom
@@ -8,6 +9,7 @@
     >
       <!--  -->
       <v-list
+        v-if="showNavigation"
         dense
         nav
       >
@@ -28,7 +30,10 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app>
+    <v-app-bar
+      v-if="showNavigation"
+      app
+      >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Generic Front End</v-toolbar-title>
@@ -48,7 +53,23 @@ export default {
 
   components: {
   },
-
+  computed: {
+    showNavigation() {
+      switch (this.$route.name) {
+        case 'home':
+          return false
+        case 'register':
+          return false
+        case 'login':
+          return false
+        case 'forgotpassword':
+          return false
+        case 'resendconfirmemail':
+          return false
+      }
+      return true
+    }
+  },
   data: () => ({
     drawer: null,
     items: [

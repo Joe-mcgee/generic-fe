@@ -42,7 +42,7 @@
       :type="show1 ? 'text' : 'password'"
       name="input-10-1"
       label="Password"
-      hint="At least 8 characters"
+      hint="At least 6 characters"
       counter
       @click:append="show1 = !show1"
       ></v-text-field>
@@ -56,7 +56,7 @@
       :type="show2 ? 'text' : 'password'"
       name="input-10-2"
       label="Repeat Password"
-      hint="At least 8 characters"
+      hint="At least 6 characters"
       class="input-group--focused"
       counter
       @click:append="show2 = !show2"

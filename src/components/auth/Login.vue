@@ -1,38 +1,60 @@
 <template>
-  <v-container fluid>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
-    <v-text-field
-      v-model="password"
-      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required]"
-      :type="show1 ? 'text' : 'password'"
-      name="input-10-1"
-      label="Password"
-      @click:append="show1 = !show1"
-    ></v-text-field>
-
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
+  <v-container
+    fluid
+    fill-height
     >
-      Submit
-    </v-btn>
+    <v-row
+      align="center"
+      justify="center"
+      height="100vh"
+      >
+      <v-col
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+        >
+        <v-sheet
+          color="grey lighten-5"
+          elevation="6"
+          >
+          <v-form
+            class="pa-3"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              label="E-mail"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="password"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[passwordRules.required]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              @click:append="show1 = !show1"
+            ></v-text-field>
 
-  </v-form>
-    <GOAuth />
-    <FBOAuth />
+            <v-btn
+              :disabled="!valid"
+              color="success"
+              class="mr-4"
+              @click="validate"
+            >
+              Submit
+            </v-btn>
+
+          </v-form>
+          <GOAuth />
+          <FBOAuth />
+        </v-sheet>
+      </v-col>
+    </v-row>
   <v-snackbar
     v-model="loginSuccess"
     top
