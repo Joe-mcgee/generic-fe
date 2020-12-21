@@ -18,6 +18,14 @@
           color="grey lighten-5"
           elevation="6"
           >
+          <v-card>
+            <v-img
+              src="@/assets/Flower-Life.jpg"
+              class="white--text align-end"
+              >
+              <v-card-title>Login</v-card-title>
+            </v-img>
+          </v-card>
           <v-form
             class="pa-3"
             ref="form"
@@ -39,16 +47,23 @@
               label="Password"
               @click:append="show1 = !show1"
             ></v-text-field>
-
+            
             <v-btn
               :disabled="!valid"
               color="success"
               class="mr-4"
               @click="validate"
             >
-              Submit
+              Sign In
             </v-btn>
-
+              <span>
+                <router-link to="/register">Register</router-link>
+              </span>
+            <p class="text-right mb-0">
+              <router-link to="/forgotpassword">
+                Forgot Password
+              </router-link>
+            </p>
           </v-form>
           <GOAuth />
           <FBOAuth />

@@ -1,19 +1,21 @@
 <template>
   <v-container>
-    <v-form
-      ref="form"
-      v-model="valid"
-      lazy-validation
-    >
       <v-btn
+        block
         :disabled="!valid"
-        color="success"
+        color="indigo"
+        outlined
         class="mr-4"
         @click="validate"
       >
+        <v-icon
+          left
+          dark
+          >
+          mdi-facebook
+        </v-icon>
         Login with Facebook
       </v-btn>
-    </v-form>
 
     <v-snackbar
       v-model="registerSuccess"
@@ -52,8 +54,6 @@ export default {
     },
   methods: {
     async validate () {
-      if (this.$refs.form.validate()) {
-        
         let response
         let data
         try {
@@ -63,7 +63,6 @@ export default {
 
           bus.$emit('registerFailure', {})
           this.$data.valid = !this.valid
-          this.$refs.form.resetValidation()
           console.log(e)
           return
         }
@@ -71,7 +70,6 @@ export default {
         if (response.success) {
           bus.$emit('registerSuccess', response)
         }
-      }
     },
   }
 

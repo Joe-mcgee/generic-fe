@@ -1,19 +1,21 @@
 <template>
   <v-container>
-    <v-form
-      ref="form"
-      v-model="valid"
-      lazy-validation
-    >
       <v-btn
+        block
         :disabled="!valid"
-        color="success"
+        color="indigo"
+        outlined
         class="mr-4"
         @click="validate"
       >
+      <v-icon
+        left
+        dark
+        >
+        mdi-google
+      </v-icon>
         Login with Google
       </v-btn>
-    </v-form>
 
     <v-snackbar
       v-model="registerSuccess"
@@ -52,25 +54,21 @@ export default {
     },
   methods: {
     async validate () {
-      if (this.$refs.form.validate()) {
-        
-        let response
-        let data
-        try {
-            response = await authService.googleLogin(data)
-            console.log(response)
-        } catch (e) {
+      let response
+      let data
+      try {
+          response = await authService.googleLogin(data)
+          console.log(response)
+      } catch (e) {
 
-          bus.$emit('registerFailure', {})
-          this.$data.valid = !this.valid
-          this.$refs.form.resetValidation()
-          console.log(e)
-          return
-        }
+        bus.$emit('registerFailure', {})
+        this.$data.valid = !this.valid
+        console.log(e)
+        return
+      }
 
-        if (response.success) {
-          bus.$emit('registerSuccess', response)
-        }
+      if (response.success) {
+        bus.$emit('registerSuccess', response)
       }
     },
   }
