@@ -82,7 +82,7 @@
     top
     v-model="loginFailure"
     >
-    Oops! Something went wrong
+    {{errorMessage}}
   </v-snackbar>
   </v-container>
 </template>
@@ -101,16 +101,17 @@ import { bus } from '@/main.js'
       loginSuccess: false,
       loginFailure: false,
       show1: false,
+      valid: true,
       password: '',
       passwordRules: {
         required: value => !!value || 'Required.',
       },
-      valid: true,
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
+      errorMessage: '',
     }),
     created() {
       bus.$on('loginSuccess', (event) => {
@@ -130,20 +131,15 @@ import { bus } from '@/main.js'
             email: this.$data.email,
             password: this.$data.password,
           }
-          let response
-          try {
-            response = await authService.login(data)
-          } catch (e) {
-
+          const response = await authService.login(data)
+          if (response.success) {
+            bus.$emit('loginSuccess', response)
+            this.$router.replace('/dashboard')
+          } else {
+            this.errorMessage = response.error
             bus.$emit('loginFailure', {})
             this.$data.valid = !this.valid
             this.$refs.form.resetValidation()
-            console.log(e)
-            return
-          }
-
-          if (response.success) {
-            bus.$emit('loginSuccess', response)
           }
         }
       },

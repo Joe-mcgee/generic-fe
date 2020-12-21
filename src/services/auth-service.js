@@ -29,8 +29,12 @@ class AuthService {
     return response.data
   }
   async login(data) {
-    let response = await http.post('/auth/login', data)
-    console.log(response)
+    let response;
+    try {
+      response = await http.post('/auth/login', data)
+    } catch (e) {
+      return e.response.data
+    }
     if (response.data.success == true) {
       VueCookies.set('token', response.data.token, "1h")
     }
