@@ -1,101 +1,119 @@
 <template>
-  <v-container>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-if="mode !== modeOptions.EDITPASSWORD"
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
-      required
-      >{{name.length >= 1 ? name : '' }}</v-text-field>
-
-    <v-text-field
-      v-if="mode !== modeOptions.EDITPASSWORD"
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      counter
-      required
-      >{{email.length >= 1 ? email : ''}}</v-text-field>
-
-    <v-text-field
-      v-if="mode === modeOptions.EDITPASSWORD"
-      v-model="currentPassword"
-      :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
-      :type="show0 ? 'text' : 'password'"
-      name="input-10-1"
-      label="Current Password"
-      @click:append="show0 = !show0"
-      ></v-text-field>
-
-    <v-text-field
-      v-if="mode !== modeOptions.EDITPROFILE"
-      v-model="password"
-      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
-      :type="show1 ? 'text' : 'password'"
-      name="input-10-1"
-      label="Password"
-      hint="At least 6 characters"
-      counter
-      @click:append="show1 = !show1"
-      ></v-text-field>
-    
-
-    <v-text-field
-      v-if="mode !== modeOptions.EDITPROFILE"
-      v-model="rePassword"
-      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
-      :type="show2 ? 'text' : 'password'"
-      name="input-10-2"
-      label="Repeat Password"
-      hint="At least 6 characters"
-      class="input-group--focused"
-      counter
-      @click:append="show2 = !show2"
-    ></v-text-field>
-
-    <v-select
-      v-if="mode !== modeOptions.EDITPASSWORD"
-      v-model="roleSelect"
-      :items="roleItems"
-      item-text="state"
-      item-value="abbr"
-      label="Role"
-      persistent-hint
-      return-object
-    ></v-select>
-
-
-    <v-checkbox
-      v-if="mode === modeOptions.REGISTER"
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
-      required
-    ></v-checkbox>
-
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
+  <v-container
+    fluid
+    fill-height
     >
-      Submit
-    </v-btn>
-    
-    <DeleteUser
-      :id="userId"
-      v-if="mode === modeOptions.EDITPROFILE"/>
+    <v-row
+      align="center"
+      justify="center"
+      height="100vh"
+      >
+      <v-col
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+        >
+        <v-sheet
+          color="grey lighten-5"
+          elevation="6"
+          >
+          <v-card>
+            <v-img
+              src="@/assets/Flower-Life.jpg"
+              class="white--text align-end"
+              >
+              <v-card-title>Register</v-card-title>
+            </v-img>
+          </v-card>
+          <v-form
+            class="pa-3"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
+            <v-text-field
+              v-if="mode !== modeOptions.EDITPASSWORD"
+              v-model="name"
+              :counter="100"
+              :rules="nameRules"
+              label="Name"
+              required
+              >{{name.length >= 1 ? name : '' }}</v-text-field>
 
-  </v-form>
+            <v-text-field
+              v-if="mode !== modeOptions.EDITPASSWORD"
+              v-model="email"
+              :rules="emailRules"
+              label="E-mail"
+              counter
+              required
+              >{{email.length >= 1 ? email : ''}}</v-text-field>
+
+            <v-text-field
+              v-if="mode === modeOptions.EDITPASSWORD"
+              v-model="currentPassword"
+              :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[passwordRules.required, passwordRules.min]"
+              :type="show0 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Current Password"
+              @click:append="show0 = !show0"
+              ></v-text-field>
+
+            <v-text-field
+              v-if="mode !== modeOptions.EDITPROFILE"
+              v-model="password"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[passwordRules.required, passwordRules.min]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              hint="At least 6 characters"
+              counter
+              @click:append="show1 = !show1"
+              ></v-text-field>
+            
+
+            <v-text-field
+              v-if="mode !== modeOptions.EDITPROFILE"
+              v-model="rePassword"
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
+              :type="show2 ? 'text' : 'password'"
+              name="input-10-2"
+              label="Repeat Password"
+              hint="At least 6 characters"
+              class="input-group--focused"
+              counter
+              @click:append="show2 = !show2"
+            ></v-text-field>
+
+
+            <v-checkbox
+              v-if="mode === modeOptions.REGISTER"
+              v-model="checkbox"
+              :rules="[v => !!v || 'You must agree to continue!']"
+              label="Do you agree?"
+              required
+            ></v-checkbox>
+
+            <v-btn
+              :disabled="!valid"
+              color="success"
+              class="mr-4"
+              @click="validate"
+            >
+              Submit
+            </v-btn>
+            
+            <DeleteUser
+              :id="userId"
+              v-if="mode === modeOptions.EDITPROFILE"/>
+          </v-form>
+        </v-sheet>
+      </v-col>
+    </v-row>
   <v-snackbar
     v-model="registerSuccess"
     top
@@ -108,7 +126,7 @@
     top
     v-model="registerFailure"
     >
-    Opps! Something went wrong
+    {{ errorMessage }}
   </v-snackbar>
   </v-container>
 </template>
@@ -143,21 +161,16 @@ import { bus } from '@/main.js'
       name: '',
       nameRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+        v => (v && v.length <= 100) || 'Name must be less than 100 characters',
       ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
-      roleSelect: {
-        state: 'Contributor', abbr: 'Cont', enum: 'user'
-      },
-      roleItems: [
-        { state: 'Contributor', abbr: 'Cont', enum: 'user' },
-      ],
       checkbox: false,
       userId: null,
+      errorMessage: '',
     }),
     async created() {
       bus.$on('registerSuccess', (event) => {
@@ -200,14 +213,13 @@ import { bus } from '@/main.js'
           
           let response
           let data
-          try {
             switch (this.mode) {
               case this.modeOptions.REGISTER:
                 data = {
                   name: this.$data.name,
                   email: this.$data.email,
                   password: this.$data.password,
-                  role: this.$data.roleSelect.enum
+                  role: 'user'
                 }
                 response = await authService.register(data)
                 break
@@ -225,18 +237,15 @@ import { bus } from '@/main.js'
                 }
                 response = await authService.updatePassword(data)
             }
-          } catch (e) {
 
-            bus.$emit('registerFailure', {})
-            this.$data.valid = !this.valid
-            this.$refs.form.resetValidation()
-            console.log(e)
-            return
-          }
-
-          if (response.success) {
-            bus.$emit('registerSuccess', response)
-          }
+            if (response.success) {
+              bus.$emit('registerSuccess', response)
+            } else {
+              this.errorMessage = response.error
+              bus.$emit('registerFailure', {})
+              this.$data.valid = !this.valid
+              this.$refs.form.resetValidation()
+            }
         }
       },
       reset () {

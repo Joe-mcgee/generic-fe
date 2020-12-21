@@ -23,47 +23,35 @@
               src="@/assets/Flower-Life.jpg"
               class="white--text align-end"
               >
-              <v-card-title>Resend Confirmation Email</v-card-title>
+              <v-card-title>Registration Success!</v-card-title>
             </v-img>
           </v-card>
-          <v-form
-            class="pa-3"
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
-            <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              required
-            ></v-text-field>
-
-            <v-btn
-              :disabled="!valid"
-              color="success"
-              class="mr-4"
-              @click="validate"
-            >
-              Resend Confirmation Email
-            </v-btn>
-          </v-form>
+          <p class="text-center ma-1 pa-3">
+            Thank you for registering! Please find a comfirmation link in your provided email
+          </p>
+          <v-divider>
+          </v-divider>
+          <p class="text-center ma-1 pa-3">
+          <router-link to="/resendconfirmemail">
+            Resend Confirmation Email
+          </router-link>
+          </p>
         </v-sheet>
       </v-col>
     </v-row>
   <v-snackbar
-    v-model="resendEmailSuccess"
+    v-model="loginSuccess"
     top
     color="green"
     >
-    Email Sent!
+    Login Success
   </v-snackbar>
   <v-snackbar
     color="red"
     top
-    v-model="resendEmailFailure"
+    v-model="loginFailure"
     >
-    {{ errorMessage }}
+    {{errorMessage}}
   </v-snackbar>
   </v-container>
 </template>
@@ -72,14 +60,14 @@ import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
     data: () => ({
-      resendEmailSuccess: false,
-      resendEmailFailure: false,
+      loginSuccess: false,
+      loginFailure: false,
       show1: false,
+      valid: true,
       password: '',
       passwordRules: {
         required: value => !!value || 'Required.',
       },
-      valid: true,
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -88,13 +76,13 @@ import { bus } from '@/main.js'
       errorMessage: '',
     }),
     created() {
-      bus.$on('resendEmailSuccess', (event) => {
-        this.resendEmailSuccess = true
+      bus.$on('loginSuccess', (event) => {
+        this.loginSuccess = true
         console.log(event)
       }) 
-      bus.$on('resendEmailFailure', (event) => {
+      bus.$on('loginFailure', (event) => {
         console.log(event)
-        this.resendEmailFailure = true
+        this.loginFailure = true
       }) 
     },
     methods: {
@@ -103,13 +91,15 @@ import { bus } from '@/main.js'
           
           const data = {
             email: this.$data.email,
+            password: this.$data.password,
           }
-          const response = await authService.resendEmail(data)
+          const response = await authService.login(data)
           if (response.success) {
-            bus.$emit('resendEmailSuccess', response)
+            bus.$emit('loginSuccess', response)
+            this.$router.replace('/dashboard')
           } else {
             this.errorMessage = response.error
-            bus.$emit('resendEmailFailure', {})
+            bus.$emit('loginFailure', {})
             this.$data.valid = !this.valid
             this.$refs.form.resetValidation()
           }

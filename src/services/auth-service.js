@@ -24,8 +24,12 @@ class AuthService {
     return response.data
   }
   async register(data) {
-    let response = await http.post('/auth/register', data)
-    console.log(response)
+    let response;
+    try {
+      response = await http.post('/auth/register', data)
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
   async login(data) {
@@ -41,8 +45,12 @@ class AuthService {
     return response.data
   }
   async resendEmail(data) {
-    let response = await http.post('/auth/resendconfirmemail', data)
-    console.log(response)
+    let response
+    try {
+      response = await http.post('/auth/resendconfirmemail', data)
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
   async forgotPassword(data) {

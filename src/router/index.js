@@ -7,6 +7,7 @@ import Dashboard from '@/views/Dashboard.vue'
 import Admin from '@/views/Admin.vue'
 
 import Register from '@/components/auth/Register.vue'
+import RegisterSuccess from '@/components/auth/RegisterSuccess.vue'
 import Login from '@/components/auth/Login.vue'
 import Logout from '@/components/auth/Logout.vue'
 import Me from '@/components/auth/Me.vue'
@@ -41,6 +42,11 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register,
+  },
+  {
+    path: '/registersuccess',
+    name: 'registersuccess',
+    component: RegisterSuccess,
   },
   {
     path: '/forgotpassword',

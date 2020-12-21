@@ -59,14 +59,18 @@
               <span>
                 <router-link to="/register">Register</router-link>
               </span>
-            <p class="text-right mb-0">
-              <router-link to="/forgotpassword">
-                Forgot Password
-              </router-link>
-            </p>
           </v-form>
+          <v-divider>
+          </v-divider>
           <GOAuth />
           <FBOAuth />
+          <v-divider>
+          </v-divider>
+          <p class="text-center pa-3">
+            <router-link to="/forgotpassword">
+              Forgot Password?
+            </router-link>
+          </p>
         </v-sheet>
       </v-col>
     </v-row>
