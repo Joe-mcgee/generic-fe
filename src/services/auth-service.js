@@ -46,8 +46,12 @@ class AuthService {
     return response.data
   }
   async forgotPassword(data) {
-    let response = await http.post('/auth/forgotpassword/', data)
-    console.log(response)
+    let response;
+    try {
+      response = await http.post('/auth/forgotpassword/', data)
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
   async resetPassword(data) {
