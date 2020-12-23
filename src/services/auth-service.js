@@ -32,6 +32,7 @@ class AuthService {
     }
     return response.data
   }
+
   async login(data) {
     let response;
     try {

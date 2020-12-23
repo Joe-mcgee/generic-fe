@@ -8,6 +8,7 @@ import Admin from '@/views/Admin.vue'
 
 import Register from '@/components/auth/Register.vue'
 import RegisterSuccess from '@/components/auth/RegisterSuccess.vue'
+import ConfirmEmail from '@/components/auth/ConfirmEmail.vue'
 import Login from '@/components/auth/Login.vue'
 import Logout from '@/components/auth/Logout.vue'
 import Me from '@/components/auth/Me.vue'
@@ -42,6 +43,11 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register,
+  },
+  {
+    path: '/api/v1/auth/confirmemail/:confirmtoken',
+    name: 'confirmemail',
+    component: ConfirmEmail,
   },
   {
     path: '/registersuccess',
