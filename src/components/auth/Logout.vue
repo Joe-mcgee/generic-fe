@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-btn
+      block
       :disabled="!valid"
       color="success"
       class="mr-4"

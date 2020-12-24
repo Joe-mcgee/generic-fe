@@ -23,7 +23,7 @@
               src="@/assets/Flower-Life.jpg"
               class="white--text align-end"
               >
-              <v-card-title>Register</v-card-title>
+              <v-card-title>{{title}}</v-card-title>
             </v-img>
           </v-card>
           <v-form
@@ -99,6 +99,7 @@
             ></v-checkbox>
 
             <v-btn
+              block
               :disabled="!valid"
               color="success"
               class="mr-4"
@@ -106,7 +107,6 @@
             >
               Submit
             </v-btn>
-            
             <DeleteUser
               :id="userId"
               v-if="mode === modeOptions.EDITPROFILE"/>
@@ -139,6 +139,7 @@ import { bus } from '@/main.js'
       DeleteUser,
     },
     data: () => ({
+      title: '',
       modeOptions: {
         REGISTER: 'register',
         EDITPROFILE: 'me',
@@ -186,8 +187,10 @@ import { bus } from '@/main.js'
       switch (this.$router.currentRoute.name) {
         case 'register':
           this.mode = this.modeOptions.REGISTER
+          this.title = 'Register'
           break
         case 'me':
+          this.title = 'Update Profile'
           this.mode = this.modeOptions.EDITPROFILE
           response = await authService.getMe()
           console.log(response.data['_id'])
@@ -198,6 +201,7 @@ import { bus } from '@/main.js'
           }
           break
         case 'updatepassword':
+          this.title= 'Update Password'
           this.mode = this.modeOptions.EDITPASSWORD
           break
       }

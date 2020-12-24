@@ -1,6 +1,10 @@
 <template>
-  <div>
+  <v-container
+    px-0
+    fluid
+    fill-height>
     <v-btn
+      block
       :disabled="!valid"
       color="error"
       class="mr-4"
@@ -22,7 +26,7 @@
     >
     Oops! Something went wrong
   </v-snackbar>
-  </div>
+  </v-container>
 </template>
 <script>
 import authService from '@/services/auth-service.js'

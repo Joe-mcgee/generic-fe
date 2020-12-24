@@ -37,6 +37,8 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Generic Front End</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <ProfileMenu />
     </v-app-bar>
 
     <v-main>
@@ -47,11 +49,11 @@
 </template>
 
 <script>
-
+import ProfileMenu from '@/components/auth/ProfileMenu.vue'
 export default {
   name: 'App',
-
   components: {
+    ProfileMenu,
   },
   computed: {
     showNavigation() {
@@ -73,12 +75,7 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { title: 'Register', icon: 'mdi-account-plus', link: '/register' },
-      { title: 'Resend Email', icon: 'mdi-email-receive', link: '/resendconfirmemail' },
-      { title: 'Login', icon: 'mdi-login', link: '/login' },
-      { title: 'Forgot Password', icon: 'mdi-lock-alert', link: '/forgotpassword' },
-      { title: 'Logout', icon: 'mdi-logout', link: '/logout' },
-      { title: 'Profile', icon: 'mdi-account', link: '/me' },
+      { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
     ],
     //
   }),
