@@ -8,6 +8,14 @@
       app
     >
       <!--  -->
+      <v-img
+        class="white--text align-end"
+        height="64px"
+        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+      >
+       <v-card-title>Generic Logo</v-card-title>
+      </v-img>
+      <v-divider></v-divider>      
       <v-list
         v-if="showNavigation"
         dense

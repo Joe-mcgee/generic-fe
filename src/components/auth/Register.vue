@@ -119,7 +119,7 @@
     top
     color="green"
     >
-    Registration Success!
+    {{ successMessage }}
   </v-snackbar>
   <v-snackbar
     color="red"
@@ -172,6 +172,7 @@ import { bus } from '@/main.js'
       checkbox: false,
       userId: null,
       errorMessage: '',
+      successMessage: '',
     }),
     async created() {
       bus.$on('registerSuccess', (event) => {
@@ -226,6 +227,7 @@ import { bus } from '@/main.js'
                   role: 'user'
                 }
                 response = await authService.register(data)
+                this.successMessage = 'Registration Successful'
                 break
               case this.modeOptions.EDITPROFILE:
                 data = {
@@ -233,6 +235,7 @@ import { bus } from '@/main.js'
                   email: this.$data.email
                 }
                 response = await authService.updateDetails(data)
+                this.successMessage = 'Profile Update Successful'
                 break;
               case this.modeOptions.EDITPASSWORD:
                 data = {
@@ -240,6 +243,7 @@ import { bus } from '@/main.js'
                   newPassword: this.$data.password
                 }
                 response = await authService.updatePassword(data)
+                this.successMessage = 'Update Password Successful'
             }
 
             if (response.success) {
