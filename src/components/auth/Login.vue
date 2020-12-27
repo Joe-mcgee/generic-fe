@@ -66,11 +66,11 @@
           <FBOAuth />
           <v-divider>
           </v-divider>
-          <p class="text-center pa-3">
-            <router-link to="/forgotpassword">
-              Forgot Password?
-            </router-link>
-          </p>
+          <router-link to="/forgotpassword">
+            <p class="text-center pa-3">
+                Forgot Password?
+            </p>
+          </router-link>
         </v-sheet>
       </v-col>
     </v-row>

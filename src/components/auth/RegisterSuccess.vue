@@ -31,11 +31,19 @@
           </p>
           <v-divider>
           </v-divider>
-          <p class="text-center ma-1 pa-3">
+    
           <router-link to="/resendconfirmemail">
-            Resend Confirmation Email
+            <p class="text-center ma-1 pa-3">
+              Resend Confirmation Email
+            </p>
           </router-link>
-          </p>
+          <v-divider>
+          </v-divider>
+          <router-link to="/login">
+            <p class="text-center ma-1 pa-3">
+              Login
+            </p>
+          </router-link>
         </v-sheet>
       </v-col>
     </v-row>
