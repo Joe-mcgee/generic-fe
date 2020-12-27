@@ -76,6 +76,10 @@ export default {
           return false
         case 'resendconfirmemail':
           return false
+        case 'registersuccess':
+          return false
+        case 'confirmemail':
+          return false
       }
       return true
     }

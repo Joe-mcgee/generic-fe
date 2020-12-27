@@ -97,24 +97,30 @@ class AuthService {
     return response.data
   }
   async updateDetails(data) {
-    console.log(VueCookies.get('token'))
-    let response = await http.put('/auth/updatedetails', data, {
-      'headers': {
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    })
-    console.log(response)
+    let response;
+    try {
+      response = await http.put('/auth/updatedetails', data, {
+        'headers': {
+          'Authorization': `Bearer ${VueCookies.get('token')}`
+        }
+      })
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
 
   async updatePassword(data) {
-    console.log(VueCookies.get('token'))
-    let response = await http.put('/auth/updatepassword', data, {
-      'headers': {
-        'Authorization': `Bearer ${VueCookies.get('token')}`
-      }
-    })
-    console.log(response)
+    let response;
+    try {
+      response = await http.put('/auth/updatepassword', data, {
+        'headers': {
+          'Authorization': `Bearer ${VueCookies.get('token')}`
+        }
+      })
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
 }

@@ -94,9 +94,14 @@
               v-if="mode === modeOptions.REGISTER"
               v-model="checkbox"
               :rules="[v => !!v || 'You must agree to continue!']"
-              label="Do you agree?"
               required
-            ></v-checkbox>
+              >
+              <span slot="label">
+                <a
+                  @click.stop
+                  target="_blank"
+                  href="http://www.example.com">Terms and Conditions</a></span>
+            </v-checkbox>
 
             <v-btn
               block
@@ -227,8 +232,17 @@ import { bus } from '@/main.js'
                   role: 'user'
                 }
                 response = await authService.register(data)
-                this.successMessage = 'Registration Successful'
-                break
+                if (response.success) {
+                  this.successMessage = 'Registration Successful'
+                  bus.$emit('registerSuccess', response)
+                  this.$router.replace('/registersuccess')
+                } else {
+                  this.errorMessage = response.error
+                  bus.$emit('registerFailure', {})
+                  this.$data.valid = !this.valid
+                  this.$refs.form.resetValidation()
+                }
+                return
               case this.modeOptions.EDITPROFILE:
                 data = {
                   name: this.$data.name,
