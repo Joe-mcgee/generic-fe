@@ -100,7 +100,7 @@
                 <a
                   @click.stop
                   target="_blank"
-                  href="http://www.example.com">Terms and Conditions</a></span>
+                  href="#">Terms and Conditions</a></span>
             </v-checkbox>
 
             <v-btn

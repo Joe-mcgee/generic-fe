@@ -40,6 +40,7 @@
             ></v-text-field>
 
             <v-btn
+              block
               :disabled="!valid"
               color="success"
               class="mr-4"

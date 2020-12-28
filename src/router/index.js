@@ -36,7 +36,7 @@ const routes = [
     name: 'dashboard',
     component: Dashboard,
     meta: {
-      guest: true
+      requiresAuth: true,
     }
   },
   {
@@ -111,6 +111,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '*',
+    name: '404',
+    component: Login
   }
 ]
 
@@ -122,7 +127,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // save home page for potential landing page, redirect to login or dashboard
-  if (to.name === "Home" ) {
+  if (to.name === "Home" || to.name == "404" ) {
     if (!VueCookies.get('token')) {
       next({
         path: '/login',
