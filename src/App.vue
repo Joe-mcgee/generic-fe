@@ -88,6 +88,7 @@ export default {
     drawer: null,
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+      { title: 'Settings', icon: 'mdi-account-cog', link: '/settings' },
     ],
     //
   }),

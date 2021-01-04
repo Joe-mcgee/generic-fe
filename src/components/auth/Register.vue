@@ -11,8 +11,8 @@
       <v-col
         cols="12"
         sm="6"
-        md="4"
-        lg="3"
+        md="5"
+        lg="4"
         >
         <v-sheet
           color="grey lighten-5"
@@ -174,6 +174,9 @@ import { bus } from '@/main.js'
     components: {
       DeleteUser,
     },
+    props: {
+      mode: String
+    },
     data: () => ({
       title: '',
       modeOptions: {
@@ -181,7 +184,6 @@ import { bus } from '@/main.js'
         EDITPROFILE: 'me',
         EDITPASSWORD: 'resetpassword'
       },
-      mode: null,
       registerSuccess: false,
       registerFailure: false,
       show0: false,
@@ -219,16 +221,19 @@ import { bus } from '@/main.js'
         console.log(event)
         this.registerFailure = true
       })
-      console.log(this.$router.currentRoute)
+      
       let response;
-      switch (this.$router.currentRoute.name) {
+
+      let modeSwitch = this.$props.mode ? this.$props.mode : this.$router.currentRoute.name
+
+      switch (modeSwitch) {
         case 'register':
-          this.mode = this.modeOptions.REGISTER
+          this.$props.mode = this.modeOptions.REGISTER
           this.title = 'Register'
           break
         case 'me':
           this.title = 'Update Profile'
-          this.mode = this.modeOptions.EDITPROFILE
+          this.$props.mode = this.modeOptions.EDITPROFILE
           response = await authService.getMe()
           console.log(response.data['_id'])
           if (response.success == true) {
@@ -239,7 +244,7 @@ import { bus } from '@/main.js'
           break
         case 'updatepassword':
           this.title= 'Update Password'
-          this.mode = this.modeOptions.EDITPASSWORD
+          this.$props.mode = this.modeOptions.EDITPASSWORD
           break
       }
     },
@@ -254,7 +259,7 @@ import { bus } from '@/main.js'
           
           let response
           let data
-            switch (this.mode) {
+            switch (this.$props.mode) {
               case this.modeOptions.REGISTER:
                 data = {
                   name: this.$data.name,

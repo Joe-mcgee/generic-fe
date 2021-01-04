@@ -1,80 +1,16 @@
 <template>
   <div class="text-center">
-    <v-menu
-      v-model="menu"
-      :close-on-content-click="false"
-      :nudge-width="200"
-      offset-x
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          fab
-          small
-          outlined
-          dark
-          v-bind="attrs"
-          v-on="on"
+    <span class="subtitle-1 pr-5"><i>Welcome, </i>{{name}}</span>
+      <v-btn
+        icon
+        large
+        outlined
+        @click="logout"
         >
-        <v-icon>mdi-account</v-icon>
-        </v-btn>
-      </template>
-
-      <v-card>
-        <v-list>
-          <v-list-item>
-            <v-list-item-avatar>
-              <img
-                src="https://cdn.vuetifyjs.com/images/john.jpg"
-                alt="John"
-              >
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title>{{name}}</v-list-item-title>
-              <v-list-item-subtitle>{{email}}</v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn
-                :class="fav ? 'red--text' : ''"
-                icon
-                @click="fav = !fav"
-              >
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-    <v-list>
-          <v-list-item
-            v-for="(options, i) in options"
-            :key="i"
-            link
-            @click="go(options.link)"
-          >
-            <v-list-item-title v-text="options.title"></v-list-item-title>
-
-            <v-list-item-icon>
-              <v-icon v-text="options.icon"></v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item
-            link
-            @click="logout()"
-          >
-            <v-list-item-title v-text="'Logout'"></v-list-item-title>
-
-            <v-list-item-icon>
-              <v-icon v-text="'mdi-logout'"></v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-    </v-list>
-
-      </v-card>
-    </v-menu>
+        <v-icon>
+          mdi-logout
+        </v-icon>
+      </v-btn>
   </div>
 </template>
 <script>

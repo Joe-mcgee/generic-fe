@@ -4,6 +4,7 @@ import VueCookies from 'vue-cookies'
 
 import Home from '@/views/Home.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import Settings from '@/views/Settings.vue'
 import Admin from '@/views/Admin.vue'
 
 import Register from '@/components/auth/Register.vue'
@@ -40,6 +41,14 @@ const routes = [
     }
   },
   {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
     path: '/register',
     name: 'register',
     component: Register,
@@ -48,6 +57,9 @@ const routes = [
     path: '/api/v1/auth/confirmemail/:confirmtoken',
     name: 'confirmemail',
     component: ConfirmEmail,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: '/registersuccess',
