@@ -39,16 +39,25 @@
               label="E-mail"
               required
             ></v-text-field>
+            
             <v-text-field
               v-model="password"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[passwordRules.required]"
               :type="show1 ? 'text' : 'password'"
+              :rules="[passwordRules.required]"
               name="input-10-1"
               label="Password"
-              @click:append="show1 = !show1"
-            ></v-text-field>
-            
+              >
+              <template
+                v-slot:append
+                >
+                  <v-icon
+                    tabindex="-1"
+                    @click="show1 = !show1"
+                    >
+                    {{show1 ? 'mdi-eye' : 'mdi-eye-off'}}
+                  </v-icon>
+              </template>
+            </v-text-field>
             <v-btn
               :disabled="!valid"
               color="success"
@@ -96,7 +105,8 @@ import authService from '@/services/auth-service.js'
 import GOAuth from '@/components/auth/GOAuth.vue'
 import FBOAuth from '@/components/auth/FBOAuth.vue'
 import { bus } from '@/main.js'
-  export default {
+
+export default {
     components: {
       GOAuth,
       FBOAuth,

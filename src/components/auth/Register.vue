@@ -51,35 +51,53 @@
               required
               >{{email.length >= 1 ? email : ''}}</v-text-field>
 
+
             <v-text-field
               v-if="mode === modeOptions.EDITPASSWORD"
               v-model="currentPassword"
-              :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[passwordRules.required, passwordRules.min]"
               :type="show0 ? 'text' : 'password'"
               name="input-10-1"
               label="Current Password"
-              @click:append="show0 = !show0"
-              ></v-text-field>
+              >
+              <template
+                v-slot:append
+                >
+                  <v-icon
+                    tabindex="-1"
+                    @click="show0 = !show0"
+                    >
+                    {{show0 ? 'mdi-eye' : 'mdi-eye-off'}}
+                  </v-icon>
+              </template>
+            </v-text-field>
 
             <v-text-field
               v-if="mode !== modeOptions.EDITPROFILE"
               v-model="password"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[passwordRules.required, passwordRules.min]"
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
               label="Password"
               hint="At least 6 characters"
               counter
-              @click:append="show1 = !show1"
-              ></v-text-field>
+              >
+              <template
+                v-slot:append
+                >
+                  <v-icon
+                    tabindex="-1"
+                    @click="show1 = !show1"
+                    >
+                    {{show1 ? 'mdi-eye' : 'mdi-eye-off'}}
+                  </v-icon>
+              </template>
+            </v-text-field>
             
 
             <v-text-field
               v-if="mode !== modeOptions.EDITPROFILE"
               v-model="rePassword"
-              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
               :type="show2 ? 'text' : 'password'"
               name="input-10-2"
@@ -87,8 +105,19 @@
               hint="At least 6 characters"
               class="input-group--focused"
               counter
-              @click:append="show2 = !show2"
-            ></v-text-field>
+            >
+              <template
+                v-slot:append
+                >
+                  <v-icon
+                    tabindex="-1"
+                    @click="show2 = !show2"
+                    >
+                    {{show2 ? 'mdi-eye' : 'mdi-eye-off'}}
+                  </v-icon>
+              </template>
+
+            </v-text-field>
 
 
             <v-checkbox
@@ -99,6 +128,7 @@
               >
               <span slot="label">
                 <a
+                  tabindex="-1"
                   @click.stop
                   target="_blank"
                   href="#">Terms and Conditions</a></span>
