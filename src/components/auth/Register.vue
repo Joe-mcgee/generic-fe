@@ -27,6 +27,7 @@
             </v-img>
           </v-card>
           <v-form
+            @keyup.native.enter="validate"
             class="pa-3"
             ref="form"
             v-model="valid"

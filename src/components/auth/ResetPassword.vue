@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <v-form
+      @keyup.native.enter="validate"
       ref="form"
       v-model="valid"
       lazy-validation
