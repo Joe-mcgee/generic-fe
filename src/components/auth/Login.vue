@@ -149,7 +149,7 @@ export default {
           const response = await authService.login(data)
           if (response.success) {
             bus.$emit('loginSuccess', response)
-            this.$router.replace('/dashboard')
+            this.$router.push({name: 'dashboard', params: {'token':response.token}})
           } else {
             this.errorMessage = response.error
             bus.$emit('loginFailure', {})

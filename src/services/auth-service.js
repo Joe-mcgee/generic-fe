@@ -1,28 +1,18 @@
 import http from "@/services/http-common.js"
 import VueCookies from 'vue-cookies'
 class AuthService {
-  async googleLogin(data) {
-    let response = await http.get('/auth/google', data)
-    console.log(response)
-    if (response.data.success) {
-      console.log(response.data)
-      let googleAuth = await http.get(response.data.googleLoginUrl)
-      console.log(googleAuth)
-      console.log('some notion of setting jwt')
+  async oAuthLogin(provider) {
+    //google
+    //facebook
+    let response
+    try {
+      response = await http.get(`/auth/${provider}`)
+    } catch (e) {
+      return e.response.data
     }
     return response.data
   }
-  async facebookLogin(data) {
-    let response = await http.get('/auth/facebook', data)
-    console.log(response)
-    if (response.data.success) {
-      console.log(response.data)
-      let facebookAuth = await http.get(response.data.facebookLoginUrl)
-      console.log(facebookAuth)
-      console.log('some notion of setting jwt')
-    }
-    return response.data
-  }
+
   async register(data) {
     let response;
     try {
@@ -41,6 +31,7 @@ class AuthService {
       return e.response.data
     }
     if (response.data.success == true) {
+      console.log('cookie set')
       VueCookies.set('token', response.data.token, "1h")
     }
     return response.data
@@ -77,7 +68,6 @@ class AuthService {
     return response.data
   }
   async getMe() {
-    console.log(VueCookies.get('token'))
     let response = await http.get('/auth/me', {
       'headers': {
         'Authorization': `Bearer ${VueCookies.get('token')}`
@@ -88,6 +78,7 @@ class AuthService {
   }
   async deleteUser(data) {
     console.log(VueCookies.get('token'))
+
     let response = await http.delete(`/auth/me/${data.id}`, {
       'headers': {
         'Authorization': `Bearer ${VueCookies.get('token')}`

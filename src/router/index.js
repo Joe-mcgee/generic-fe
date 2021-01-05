@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies'
+console.log(VueCookies)
 
 import Home from '@/views/Home.vue'
 import Dashboard from '@/views/Dashboard.vue'
@@ -145,9 +146,22 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-  // save home page for potential landing page, redirect to login or dashboard
-  console.log(to)
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (VueCookies.get('token') || to.params.token) {
+      next()
+    } else {
+      // async cookie fast workaround
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath },
+      })
+    }
+  } else {
+    next()
+  }
+  /*
   if (to.name === "Home" || to.name == "404" ) {
+    console.log('home or 404')
     if (!VueCookies.get('token')) {
       next({
         path: '/login',
@@ -162,19 +176,19 @@ router.beforeEach((to, from, next) => {
     }
   }
   // Reroute based on auth
-  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!VueCookies.get('token')) {
       next({
         path: '/login',
         params: { nextUrl: to.fullPath },
       })
     } else {
+      console.log('token')
       next()
     }
   } else {
     next()
   }
 
+*/
 })
-
 export default router

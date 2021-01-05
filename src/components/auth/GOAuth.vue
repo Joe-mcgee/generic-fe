@@ -54,22 +54,15 @@ export default {
     },
   methods: {
     async validate () {
-      let response
-      let data
-      try {
-          response = await authService.googleLogin(data)
-          console.log(response)
-      } catch (e) {
-
+      const response = await authService.oAuthLogin('google')
+      if (response.success) {
+        window.open(response.data.googleLoginUrl)
+        bus.$emit('registerSuccess', response)
+      } else {
         bus.$emit('registerFailure', {})
         this.$data.valid = !this.valid
-        console.log(e)
-        return
       }
 
-      if (response.success) {
-        bus.$emit('registerSuccess', response)
-      }
     },
   }
 
