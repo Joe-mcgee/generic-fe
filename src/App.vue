@@ -80,6 +80,8 @@ export default {
           return false
         case 'confirmemail':
           return false
+        case 'forgotpasswordsuccess':
+          return false
       }
       return true
     }

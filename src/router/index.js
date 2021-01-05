@@ -15,6 +15,7 @@ import Logout from '@/components/auth/Logout.vue'
 import Me from '@/components/auth/Me.vue'
 import ForgotPassword from '@/components/auth/ForgotPassword.vue'
 import ResetPassword from '@/components/auth/ResetPassword.vue'
+import ForgotPasswordSuccess from '@/components/auth/ForgotPasswordSuccess.vue'
 import ResendEmail from '@/components/auth/ResendEmail.vue'
 Vue.use(VueRouter)
 
@@ -70,6 +71,12 @@ const routes = [
     path: '/forgotpassword',
     name: 'forgotpassword',
     component: ForgotPassword,
+  },
+  {
+    path: '/forgotpasswordsuccess',
+    name: 'forgotpasswordsuccess',
+    component: ForgotPasswordSuccess,
+    meta: {guest: true}
   },
   {
     path: '/resendconfirmemail',
@@ -139,6 +146,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // save home page for potential landing page, redirect to login or dashboard
+  console.log(to)
   if (to.name === "Home" || to.name == "404" ) {
     if (!VueCookies.get('token')) {
       next({

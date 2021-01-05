@@ -1,8 +1,8 @@
 <template>
   <v-container
     fluid
-    fill-height>
-
+    fill-height
+    >
     <v-row
       align="center"
       justify="center"
@@ -23,49 +23,43 @@
               src="@/assets/Flower-Life.jpg"
               class="white--text align-end"
               >
-              <v-card-title>Forgot Password</v-card-title>
+              <v-card-title>Reset Password Success!</v-card-title>
             </v-img>
           </v-card>
-          <v-form
-            @keyup.native.enter="validate"
-            class="pa-3"
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
-            <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              required
-            ></v-text-field>
-
-            <v-btn
-              block
-              :disabled="!valid"
-              color="success"
-              class="mr-4"
-              @click="validate"
-            >
-              Reset Password
-            </v-btn>
-          </v-form>
+          <p class="text-center ma-1 pa-3">
+           If the account exists, an email has been sent with instructions to reset your password 
+          </p>
+          <v-divider>
+          </v-divider>
+    
+          <router-link to="/resendconfirmemail">
+            <p class="text-center ma-1 pa-3">
+              Resend Confirmation Email
+            </p>
+          </router-link>
+          <v-divider>
+          </v-divider>
+          <router-link to="/login">
+            <p class="text-center ma-1 pa-3">
+              Login
+            </p>
+          </router-link>
         </v-sheet>
       </v-col>
     </v-row>
   <v-snackbar
-    v-model="forgotPasswordSuccess"
+    v-model="loginSuccess"
     top
     color="green"
     >
-    Email Sent!
+    Login Success
   </v-snackbar>
   <v-snackbar
     color="red"
     top
-    v-model="forgotPasswordFailure"
+    v-model="loginFailure"
     >
-    {{ errorMessage }}
+    {{errorMessage}}
   </v-snackbar>
   </v-container>
 </template>
@@ -74,8 +68,8 @@ import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
     data: () => ({
-      forgotPasswordSuccess: false,
-      forgotPasswordFailure: false,
+      loginSuccess: false,
+      loginFailure: false,
       show1: false,
       valid: true,
       password: '',
@@ -90,13 +84,13 @@ import { bus } from '@/main.js'
       errorMessage: '',
     }),
     created() {
-      bus.$on('forgotPasswordSuccess', (event) => {
-        this.forgotPasswordSuccess = true
+      bus.$on('loginSuccess', (event) => {
+        this.loginSuccess = true
         console.log(event)
       }) 
-      bus.$on('forgotPasswordFailure', (event) => {
+      bus.$on('loginFailure', (event) => {
         console.log(event)
-        this.forgotPasswordFailure = true
+        this.loginFailure = true
       }) 
     },
     methods: {
@@ -105,14 +99,15 @@ import { bus } from '@/main.js'
           
           const data = {
             email: this.$data.email,
+            password: this.$data.password,
           }
-          const response = await authService.forgotPassword(data)
+          const response = await authService.login(data)
           if (response.success) {
-            bus.$emit('forgotPasswordSuccess', response)
-            this.$router.push('/forgotpasswordsuccess')
+            bus.$emit('loginSuccess', response)
+            this.$router.replace('/dashboard')
           } else {
-            this.errormessage = response.error
-            bus.$emit('forgotPasswordFailure', {})
+            this.errorMessage = response.error
+            bus.$emit('loginFailure', {})
             this.$data.valid = !this.valid
             this.$refs.form.resetValidation()
           }
