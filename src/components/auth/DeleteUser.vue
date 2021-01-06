@@ -69,6 +69,7 @@ import { bus } from '@/main.js'
 
           if (response.success) {
             bus.$emit('deleteSuccess', response)
+            this.$router.push('/login')
           }
       },
     },

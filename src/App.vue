@@ -46,7 +46,7 @@
 
       <v-toolbar-title>Generic Front End</v-toolbar-title>
       <v-spacer></v-spacer>
-      <ProfileMenu />
+      <Logout />
     </v-app-bar>
 
     <v-main>
@@ -57,11 +57,11 @@
 </template>
 
 <script>
-import ProfileMenu from '@/components/auth/ProfileMenu.vue'
+import Logout from '@/components/auth/Logout.vue'
 export default {
   name: 'App',
   components: {
-    ProfileMenu,
+    Logout,
   },
   computed: {
     showNavigation() {

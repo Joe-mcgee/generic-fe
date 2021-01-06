@@ -8,12 +8,10 @@ import Dashboard from '@/views/Dashboard.vue'
 import Settings from '@/views/Settings.vue'
 import Admin from '@/views/Admin.vue'
 
-import Register from '@/components/auth/Register.vue'
+import Register from '@/views/Register.vue'
 import RegisterSuccess from '@/components/auth/RegisterSuccess.vue'
 import ConfirmEmail from '@/components/auth/ConfirmEmail.vue'
 import Login from '@/components/auth/Login.vue'
-import Logout from '@/components/auth/Logout.vue'
-import Me from '@/components/auth/Me.vue'
 import ForgotPassword from '@/components/auth/ForgotPassword.vue'
 import ResetPassword from '@/components/auth/ResetPassword.vue'
 import ForgotPasswordSuccess from '@/components/auth/ForgotPasswordSuccess.vue'
@@ -88,23 +86,6 @@ const routes = [
     path: '/resetpassword/:resettoken',
     name: 'resetpassword',
     component: ResetPassword
-  },
-  {
-    path: '/logout',
-    name: 'logout',
-    component: Logout,
-    meta: {
-      guest: false,
-    }
-  },
-  {
-    path: '/me',
-    name: 'me',
-    component: Me,
-    meta: {
-      requiresAuth: true,
-      guest: false,
-    }
   },
   {
     path: '/updatepassword',

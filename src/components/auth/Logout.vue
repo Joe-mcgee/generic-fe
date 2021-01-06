@@ -1,83 +1,61 @@
 <template>
-  <v-container>
-    <v-btn
-      block
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
-    >
-      Submit
-    </v-btn>
-  <v-snackbar
-    v-model="logoutSuccess"
-    top
-    color="green"
-    >
-    Logout Success
-  </v-snackbar>
-  <v-snackbar
-    color="red"
-    top
-    v-model="logoutFailure"
-    >
-    Oops! Something went wrong
-  </v-snackbar>
-  </v-container>
+  <div class="text-center">
+    <span class="subtitle-1 pr-5"><i>Welcome, </i>{{name}}</span>
+      <v-btn
+        icon
+        large
+        outlined
+        @click="logout"
+        >
+        <v-icon>
+          mdi-logout
+        </v-icon>
+      </v-btn>
+  </div>
 </template>
 <script>
+
 import authService from '@/services/auth-service.js'
-import { bus } from '@/main.js'
+
+//import Logout from '@/components/auth/Logout.vue'
   export default {
+    components: {
+      //Logout
+    },
     data: () => ({
-      logoutSuccess: false,
-      logoutFailure: false,
-      show1: false,
-      password: '',
-      passwordRules: {
-        required: value => !!value || 'Required.',
-      },
-      valid: true,
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true,
+      name: '',
       email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
+      role: '',
+      options: [
+        { title: 'Update Profile', icon: 'mdi-account', link: '/me' },
+        { title: 'Update Password', icon: 'mdi-lock-plus', link: '/updatepassword' },
+      ]    
     }),
-    created() {
-      bus.$on('logoutSuccess', (event) => {
-        this.logoutSuccess = true
-        console.log(event)
-      }) 
-      bus.$on('logoutFailure', (event) => {
-        console.log(event)
-        this.logoutFailure = true
-      }) 
+    async created() {
+      const response = await authService.getMe()
+      console.log(response)
+      if (response.success == true) {
+        this.name = response.data.name
+        this.email = response.data.email
+        this.role = response.data.role
+      } else {
+        this.name = "no user detected"
+      }
     },
     methods: {
-      async validate () {
-          let response
-          try {
-            response = await authService.logout()
-          } catch (e) {
-
-            bus.$emit('logoutFailure', {})
-            this.$data.valid = !this.valid
-            this.$refs.form.resetValidation()
-            console.log(e)
-            return
-          }
-
-          if (response.success) {
-            bus.$emit('logoutSuccess', response)
-          }
+      go(link) {
+        if (this.$router.currentRoute.name !== link) {
+          this.$router.replace(link)
+        }
       },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
-    },
+      async logout() {
+        await authService.logout()
+        this.$router.replace('/login')
+      }
+    }
   }
 </script>
