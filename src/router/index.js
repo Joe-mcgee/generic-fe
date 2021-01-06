@@ -22,7 +22,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+     requiresAuth: true 
+    }
   },
   {
     path: '/login',
@@ -59,6 +62,14 @@ const routes = [
     component: ConfirmEmail,
     meta: {
       requiresAuth: false,
+    },
+  },
+  {
+    path: '/api/v1/auth/login',
+    name: 'oauth',
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
     },
   },
   {
@@ -121,13 +132,16 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 })
 
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach( (to, from, next) => {
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
+
     if (VueCookies.get('token') || to.params.token) {
       next()
     } else {

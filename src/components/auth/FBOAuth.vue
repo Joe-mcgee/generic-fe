@@ -54,22 +54,15 @@ export default {
     },
   methods: {
     async validate () {
-        let response
-        let data
-        try {
-            response = await authService.facebookLogin(data)
-            console.log(response)
-        } catch (e) {
+      const response = await authService.oAuthLogin('facebook')
+      if (response.success) {
+        window.open(response.data.facebookLoginUrl)
+        bus.$emit('registerSuccess', response)
+      } else {
+        bus.$emit('registerFailure', {})
+        this.$data.valid = !this.valid
+      }
 
-          bus.$emit('registerFailure', {})
-          this.$data.valid = !this.valid
-          console.log(e)
-          return
-        }
-
-        if (response.success) {
-          bus.$emit('registerSuccess', response)
-        }
     },
   }
 
