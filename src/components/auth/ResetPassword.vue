@@ -1,46 +1,70 @@
 <template>
-  <v-container>
+  <Card
+    title="Reset Password"
+    >
     <v-form
       @keyup.native.enter="validate"
+      class="pa-3"
       ref="form"
       v-model="valid"
       lazy-validation
       >
-    <v-text-field
-      v-model="password"
-      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min]"
-      :type="show1 ? 'text' : 'password'"
-      name="input-10-1"
-      label="Password"
-      hint="At least 8 characters"
-      counter
-      @click:append="show1 = !show1"
-      ></v-text-field>
-    
 
-    <v-text-field
-      v-model="rePassword"
-      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-      :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
-      :type="show2 ? 'text' : 'password'"
-      name="input-10-2"
-      label="Repeat Password"
-      hint="At least 8 characters"
-      class="input-group--focused"
-      counter
-      @click:append="show2 = !show2"
-    ></v-text-field>
+      <v-text-field
+        v-model="password"
+        :type="show1 ? 'text' : 'password'"
+        :rules="[passwordRules.required]"
+        name="input-10-1"
+        label="Password"
+        >
+        <template
+          v-slot:append
+          >
+            <v-icon
+              tabindex="-1"
+              @click="show1 = !show1"
+              >
+              {{show1 ? 'mdi-eye' : 'mdi-eye-off'}}
+            </v-icon>
+        </template>
+      </v-text-field>
+
+      <v-text-field
+        v-model="rePassword"
+        :type="show2 ? 'text' : 'password'"
+        :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
+        name="input-10-2"
+        label="Repeat Password"
+        >
+        <template
+          v-slot:append
+          >
+            <v-icon
+              tabindex="-1"
+              @click="show2 = !show2"
+              >
+              {{show2 ? 'mdi-eye' : 'mdi-eye-off'}}
+            </v-icon>
+        </template>
+      </v-text-field>
     <v-btn
+      block
       :disabled="!valid"
       color="success"
       class="mr-4"
       @click="validate"
     >
-      Submit
+      Reset Password
     </v-btn>
     </v-form>
 
+    <v-divider>
+    </v-divider>
+    <router-link to="/login">
+      <p class="text-center pa-3">
+        Login
+      </p>
+    </router-link>
   <v-snackbar
     v-model="resetPasswordSuccess"
     top
@@ -53,15 +77,19 @@
     top
     v-model="resetPasswordFailure"
     >
-    Opps! Something went wrong
+    {{errorMessage}}
   </v-snackbar>
-  </v-container>
+  </Card>
 </template>
 <script>
 
+import Card from '@/components/Card.vue'
 import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
 export default {
+  components: {
+    Card
+  },
   data: () => ({
     password: '',
     rePassword: '',
@@ -74,6 +102,7 @@ export default {
       min: v => v.length >= 6 || 'Min 6 characters',
     },
     valid: true,
+    errorMessage: '',
   }),
   async created() {
     bus.$on('resetPasswordSuccess', (event) => {
@@ -98,17 +127,17 @@ export default {
           resettoken: this.$route.params.resettoken,
           password: this.password
         }
-        let response
-        try {
-          response = await authService.resetPassword(data)
+        const response = await authService.resetPassword(data)
           if (response.success) {
             bus.$emit('resetPasswordSuccess', response)
+            this.$router.push('/resetpasswordsuccess')
+            
           } else {
+            this.errorMessage = response.error
             bus.$emit('resetPasswordFailure', response)
+
           }
-        } catch (e) {
           bus.$emit('resetPasswordFailure', response)
-        }
       }
     }
   }

@@ -15,6 +15,7 @@ import Login from '@/components/auth/Login.vue'
 import ForgotPassword from '@/components/auth/ForgotPassword.vue'
 import ResetPassword from '@/components/auth/ResetPassword.vue'
 import ForgotPasswordSuccess from '@/components/auth/ForgotPasswordSuccess.vue'
+import ResetPasswordSuccess from '@/components/auth/ResetPasswordSuccess.vue'
 import ResendEmail from '@/components/auth/ResendEmail.vue'
 Vue.use(VueRouter)
 
@@ -94,9 +95,15 @@ const routes = [
     component: ResendEmail,
   },
   {
-    path: '/resetpassword/:resettoken',
+    path: '/api/v1/auth/resetpassword/:resettoken',
     name: 'resetpassword',
     component: ResetPassword
+  },
+  {
+    path: '/resetpasswordsuccess',
+    name: 'resetpasswordsuccess',
+    component: ResetPasswordSuccess,
+    meta: {guest: true}
   },
   {
     path: '/updatepassword',

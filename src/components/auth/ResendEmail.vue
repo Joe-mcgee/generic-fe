@@ -49,6 +49,14 @@
               Resend Confirmation Email
             </v-btn>
           </v-form>
+
+          <v-divider>
+          </v-divider>
+          <router-link to="/login">
+            <p class="text-center pa-3">
+                Login
+            </p>
+          </router-link>
         </v-sheet>
       </v-col>
     </v-row>

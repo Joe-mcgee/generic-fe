@@ -82,6 +82,10 @@ export default {
           return false
         case 'forgotpasswordsuccess':
           return false
+        case 'resetpasswordsuccess':
+          return false
+        case 'resetpassword':
+          return false
       }
       return true
     }

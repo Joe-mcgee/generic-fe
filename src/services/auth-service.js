@@ -55,8 +55,12 @@ class AuthService {
     return response.data
   }
   async resetPassword(data) {
-    let response = await http.put(`/auth/resetpassword/${data.resettoken}`, data)
-    console.log(response)
+    let response;
+    try {
+      response = await http.put(`/auth/resetpassword/${data.resettoken}`, data)
+    } catch (e) {
+      return e.response.data
+    }
     return response.data
   }
   async logout() {
