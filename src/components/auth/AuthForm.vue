@@ -182,19 +182,16 @@ import { bus } from '@/main.js'
       successMessage: '',
     }),
     async created() {
-      bus.$on('registerSuccess', (event) => {
+      bus.$on('registerSuccess', () => {
         this.registerSuccess = true
-        console.log(event)
       }) 
-      bus.$on('registerFailure', (event) => {
-        console.log(event)
+      bus.$on('registerFailure', () => {
         this.registerFailure = true
       })
       
       let response;
 
       let modeSwitch = this.$props.mode ? this.$props.mode : this.$router.currentRoute.name
-      console.log(modeSwitch)
       switch (modeSwitch) {
         case 'register':
           this.$props.mode = this.modeOptions.REGISTER
@@ -204,7 +201,6 @@ import { bus } from '@/main.js'
           this.title = 'Update Profile'
           this.$props.mode = this.modeOptions.EDITPROFILE
           response = await authService.getMe()
-          console.log(response.data['_id'])
           if (response.success == true) {
               this.name = response.data.name
               this.email = response.data.email
@@ -212,7 +208,6 @@ import { bus } from '@/main.js'
           }
           break
         case 'updatepassword':
-          console.log('hi')
           this.title = 'Update Password'
           this.$props.mode = this.modeOptions.EDITPASSWORD
           break
@@ -255,8 +250,18 @@ import { bus } from '@/main.js'
                   email: this.$data.email
                 }
                 response = await authService.updateDetails(data)
-                this.successMessage = 'Profile Update Successful'
-                break;
+                if (response.success) {
+
+                  this.successMessage = 'Profile Update Successful'
+                  this.registerSuccess = true
+                  bus.$emit('update-profile', response.data)
+                } else {
+                  this.errorMessage = response.error
+                  bus.$emit('registerFailure', {})
+                  this.$data.valid = !this.valid
+                  this.$refs.form.resetValidation()
+                }
+                return
               case this.modeOptions.EDITPASSWORD:
                 data = {
                   currentPassword: this.$data.currentPassword,
@@ -264,16 +269,16 @@ import { bus } from '@/main.js'
                 }
                 response = await authService.updatePassword(data)
                 this.successMessage = 'Update Password Successful'
+                if (response.success) {
+                  this.registerSuccess = true
+                } else {
+                  this.errorMessage = response.error
+                  bus.$emit('registerFailure', {})
+                  this.$data.valid = !this.valid
+                  this.$refs.form.resetValidation()
+                }
             }
 
-            if (response.success) {
-              bus.$emit('registerSuccess', response)
-            } else {
-              this.errorMessage = response.error
-              bus.$emit('registerFailure', {})
-              this.$data.valid = !this.valid
-              this.$refs.form.resetValidation()
-            }
         }
       },
       reset () {

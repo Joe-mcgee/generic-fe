@@ -15,6 +15,7 @@
 </template>
 <script>
 
+import { bus } from '@/main.js'
 import authService from '@/services/auth-service.js'
 
 //import Logout from '@/components/auth/Logout.vue'
@@ -36,6 +37,9 @@ import authService from '@/services/auth-service.js'
       ]    
     }),
     async created() {
+      bus.$on('update-profile', (data) => {
+        this.name = data.name
+      }) 
       const response = await authService.getMe()
       console.log(response)
       if (response.success == true) {
