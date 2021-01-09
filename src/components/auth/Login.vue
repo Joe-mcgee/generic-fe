@@ -111,14 +111,22 @@ export default {
       errorMessage: '',
     }),
     created() {
-      bus.$on('loginSuccess', (event) => {
+      bus.$on('loginSuccess', () => {
         this.loginSuccess = true
-        console.log(event)
       }) 
-      bus.$on('loginFailure', (event) => {
-        console.log(event)
+      bus.$on('loginFailure', () => {
         this.loginFailure = true
-      }) 
+      })
+
+      console.log(this.$route.query)
+      if (this.$route.query) {
+        if ('success' in this.$route.query) {
+          if (this.$route.query.success === 'false') {
+            this.errorMessage = this.$route.query.error
+            this.loginFailure = true
+          }
+        }
+      }
     },
     methods: {
       async validate () {

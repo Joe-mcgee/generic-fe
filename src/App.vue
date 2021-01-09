@@ -86,6 +86,10 @@ export default {
           return false
         case 'resetpassword':
           return false
+        case 'oauth login error':
+          return false
+        case '404':
+          return false
       }
       return true
     }
