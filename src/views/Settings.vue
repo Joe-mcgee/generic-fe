@@ -10,30 +10,24 @@
     </v-card>
     <v-divider>
     </v-divider>
-    <AuthForm mode="me"/>
+    <AuthForm
+      v-if="oauth"
+      mode="oauth-me"/>
+    <AuthForm
+      v-else
+      mode="me"/>
     <v-divider>
     </v-divider>
     <v-card>
       <v-card-title
+        v-if="!oauth"
         >Update Password</v-card-title>
     </v-card>
     <v-divider>
     </v-divider>
-  <!--
-    <v-card>
-    <v-img
-      :src="require('@/assets/Flower-Life.jpg')"
-      class="white--text align-end darken"
-      max-height="64px"
-      >
-      <v-card-title
-        style="-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: grey"
-        >Update Password</v-card-title>
-    </v-img>
-    </v-card>
-  -->
-      
-    <AuthForm mode="updatepassword"/>
+    <AuthForm
+      v-if="!oauth"
+      mode="updatepassword"/>
   </Card>
 </template>
 
@@ -41,12 +35,21 @@
 // @ is an alias to /src
 import Card from '@/components/Card.vue'
 import AuthForm from '@/components/auth/AuthForm.vue'
+import VueCookies from 'vue-cookies'
 
 export default {
   name: 'Home',
   components: {
     AuthForm,
     Card
+  },
+  data: () => ({
+    oauth: false
+  }),
+  created() {
+    if (VueCookies.get('oauth')) {
+      this.oauth = true
+    }
   }
 }
 </script>

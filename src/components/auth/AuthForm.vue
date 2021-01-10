@@ -7,7 +7,7 @@
       lazy-validation
     >
       <v-text-field
-        v-if="mode !== modeOptions.EDITPASSWORD"
+        v-if="showName"
         v-model="name"
         :counter="100"
         :rules="nameRules"
@@ -16,7 +16,7 @@
         >{{name.length >= 1 ? name : '' }}</v-text-field>
 
       <v-text-field
-        v-if="mode !== modeOptions.EDITPASSWORD"
+        v-if="showEmail"
         v-model="email"
         :rules="emailRules"
         label="E-mail"
@@ -26,10 +26,10 @@
 
 
       <v-text-field
-        v-if="mode === modeOptions.EDITPASSWORD"
+        v-if="showCurrentPassword"
         v-model="currentPassword"
         :rules="[passwordRules.required, passwordRules.min]"
-        :type="show0 ? 'text' : 'password'"
+        :type="eyeShow0 ? 'text' : 'password'"
         name="input-10-1"
         label="Current Password"
         >
@@ -38,18 +38,18 @@
           >
             <v-icon
               tabindex="-1"
-              @click="show0 = !show0"
+              @click="eyeShow0 = !eyeShow0"
               >
-              {{show0 ? 'mdi-eye' : 'mdi-eye-off'}}
+              {{eyeShow0 ? 'mdi-eye' : 'mdi-eye-off'}}
             </v-icon>
         </template>
       </v-text-field>
 
       <v-text-field
-        v-if="mode !== modeOptions.EDITPROFILE"
+        v-if="showPassword"
         v-model="password"
         :rules="[passwordRules.required, passwordRules.min]"
-        :type="show1 ? 'text' : 'password'"
+        :type="eyeShow1 ? 'text' : 'password'"
         name="input-10-1"
         label="Password"
         hint="At least 6 characters"
@@ -60,19 +60,19 @@
           >
             <v-icon
               tabindex="-1"
-              @click="show1 = !show1"
+              @click="eyeShow1 = !eyeShow1"
               >
-              {{show1 ? 'mdi-eye' : 'mdi-eye-off'}}
+              {{eyeShow1 ? 'mdi-eye' : 'mdi-eye-off'}}
             </v-icon>
         </template>
       </v-text-field>
       
 
       <v-text-field
-        v-if="mode !== modeOptions.EDITPROFILE"
+        v-if="showRePassword"
         v-model="rePassword"
         :rules="[passwordRules.required, passwordRules.min, passwordMatch]"
-        :type="show2 ? 'text' : 'password'"
+        :type="eyeShow2 ? 'text' : 'password'"
         name="input-10-2"
         label="Repeat Password"
         hint="At least 6 characters"
@@ -84,9 +84,9 @@
           >
             <v-icon
               tabindex="-1"
-              @click="show2 = !show2"
+              @click="eyeShow2 = !eyeShow2"
               >
-              {{show2 ? 'mdi-eye' : 'mdi-eye-off'}}
+              {{eyeShow2 ? 'mdi-eye' : 'mdi-eye-off'}}
             </v-icon>
         </template>
 
@@ -94,7 +94,7 @@
 
 
       <v-checkbox
-        v-if="mode === modeOptions.REGISTER"
+        v-if="showCheckbox"
         v-model="checkbox"
         :rules="[v => !!v || 'You must agree to continue!']"
         required
@@ -116,9 +116,6 @@
       >
       {{title}}
       </v-btn>
-      <DeleteUser
-        :id="userId"
-        v-if="mode === modeOptions.EDITPROFILE"/>
       <v-snackbar
         v-model="registerSuccess"
         top
@@ -136,13 +133,9 @@
     </v-form>
 </template>
 <script>
-import DeleteUser from '@/components/auth/DeleteUser.vue'
 import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
   export default {
-    components: {
-      DeleteUser,
-    },
     props: {
       mode: String
     },
@@ -151,32 +144,39 @@ import { bus } from '@/main.js'
       modeOptions: {
         REGISTER: 'register',
         EDITPROFILE: 'me',
+        EDITPROFILEOAUTH: 'oauth-me',
         EDITPASSWORD: 'updatepassword'
       },
       registerSuccess: false,
       registerFailure: false,
-      show0: false,
-      show1: false,
-      show2: false,
+      eyeShow0: false,
+      eyeShow1: false,
+      eyeShow2: false,
       currentPassword: '',
+      showCurrentPassword: false,
       password: '',
+      showPassword: false,
       rePassword: '',
+      showRePassword: false,
       passwordRules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 6 || 'Min 6 characters',
       },
       valid: true,
       name: '',
+      showName: false,
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 100) || 'Name must be less than 100 characters',
       ],
       email: '',
+      showEmail: false,
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
       checkbox: false,
+      showCheckbox: false,
       userId: null,
       errorMessage: '',
       successMessage: '',
@@ -194,12 +194,17 @@ import { bus } from '@/main.js'
       let modeSwitch = this.$props.mode ? this.$props.mode : this.$router.currentRoute.name
       switch (modeSwitch) {
         case 'register':
-          this.$props.mode = this.modeOptions.REGISTER
+          this.showName = true
+          this.showEmail = true
+          this.showPassword = true
+          this.showRePassword = true
+          this.showCheckbox = true
           this.title = 'Register'
           break
         case 'me':
+          this.showName = true
+          this.showEmail = true
           this.title = 'Update Profile'
-          this.$props.mode = this.modeOptions.EDITPROFILE
           response = await authService.getMe()
           if (response.success == true) {
               this.name = response.data.name
@@ -207,9 +212,21 @@ import { bus } from '@/main.js'
               this.userId = response.data['_id']
           }
           break
+        case 'oauth-me':
+          this.showName = true
+          this.title = 'Update Profile'
+          response = await authService.getMe()
+          if (response.success == true) {
+            this.name = response.data.name
+            this.email = response.data.email
+
+          }
+          break
         case 'updatepassword':
           this.title = 'Update Password'
-          this.$props.mode = this.modeOptions.EDITPASSWORD
+          this.showCurrentPassword = true
+          this.showPassword = true
+          this.showRePassword = true
           break
       }
     },
@@ -246,8 +263,26 @@ import { bus } from '@/main.js'
                 return
               case this.modeOptions.EDITPROFILE:
                 data = {
-                  name: this.$data.name,
-                  email: this.$data.email
+                  name: this.name,
+                  email: this.email
+                }
+                response = await authService.updateDetails(data)
+                if (response.success) {
+
+                  this.successMessage = 'Profile Update Successful'
+                  this.registerSuccess = true
+                  bus.$emit('update-profile', response.data)
+                } else {
+                  this.errorMessage = response.error
+                  bus.$emit('registerFailure', {})
+                  this.valid = !this.valid
+                  this.$refs.form.resetValidation()
+                }
+                return
+              case this.modeOptions.EDITPROFILEOAUTH:
+                data = {
+                  name: this.name,
+                  email: this.email
                 }
                 response = await authService.updateDetails(data)
                 if (response.success) {

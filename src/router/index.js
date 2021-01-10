@@ -158,6 +158,9 @@ const router = new VueRouter({
 
 router.beforeEach( (to, from, next) => {
   console.log('to', to)
+  if (to.name === 'oauth') {
+    VueCookies.set('oauth', true, "12h")
+  }
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
     if (VueCookies.get('token') || to.params.token) {
