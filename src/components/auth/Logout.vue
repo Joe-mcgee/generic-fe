@@ -1,6 +1,7 @@
 <template>
   <div class="text-center">
-    <span class="subtitle-1 pr-5"><i>Welcome, </i>{{name}}</span>
+    <span
+      class="subtitle-1 pr-5 d-none d-md-inline"><i>Welcome, </i>{{name}}</span>
       <v-btn
         icon
         large
