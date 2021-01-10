@@ -8,13 +8,13 @@
         class="mr-4"
         @click="validate"
       >
-        <v-icon
-          left
-          dark
-          >
-          mdi-facebook
-        </v-icon>
-        Login with Facebook
+      <v-icon
+        left
+        dark
+        >
+        {{icon}}
+      </v-icon>
+        Login with {{name}}
       </v-btn>
 
     <v-snackbar
@@ -22,14 +22,14 @@
       top
       color="green"
       >
-      Facebook Auth Success
+      {{name}} Auth Success
     </v-snackbar>
     <v-snackbar
       color="red"
       top
       v-model="registerFailure"
       >
-      Facebook Auth fail
+      {{name}} Auth fail
     </v-snackbar>
   </v-container>
 </template>
@@ -37,6 +37,11 @@
 import authService from '@/services/auth-service.js'
 import { bus } from '@/main.js'
 export default {
+  props: {
+    id: String,
+    icon: String,
+    name: String,
+  },
   data: () => ({
     valid: true,
     registerSuccess: false,
@@ -54,13 +59,14 @@ export default {
     },
   methods: {
     async validate () {
-      const response = await authService.oAuthLogin('facebook')
+      const response = await authService.oAuthLogin(this.$props.id)
       if (response.success) {
-        window.open(response.data.facebookLoginUrl)
+        
+        window.location.replace(response.data.loginUrl)
         bus.$emit('registerSuccess', response)
       } else {
         bus.$emit('registerFailure', {})
-        this.$data.valid = !this.valid
+        this.valid = !this.valid
       }
 
     },

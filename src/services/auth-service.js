@@ -32,7 +32,7 @@ class AuthService {
     }
     if (response.data.success == true) {
       console.log('cookie set')
-      VueCookies.set('token', response.data.token, "1h")
+      VueCookies.set('token', response.data.token, "12h")
     }
     return response.data
   }
@@ -68,6 +68,7 @@ class AuthService {
     console.log(response)
     if (response.data.success == true) {
       VueCookies.remove('token')
+      VueCookies.remove('oauth')
     }
     return response.data
   }

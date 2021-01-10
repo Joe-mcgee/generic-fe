@@ -74,6 +74,14 @@ const routes = [
     },
   },
   {
+    path: '/api/v1/auth/:provider/login/error',
+    name: 'oauth login error',
+    component: Login,
+    meta: {
+      requiresAuth: false,
+    }
+  },
+  {
     path: '/registersuccess',
     name: 'registersuccess',
     component: RegisterSuccess,
@@ -134,7 +142,10 @@ const routes = [
   {
     path: '*',
     name: '404',
-    component: Login
+    component: Login,
+    meta: {
+      requiresAuth: false
+    }
   }
 ]
 
@@ -146,7 +157,10 @@ const router = new VueRouter({
 
 
 router.beforeEach( (to, from, next) => {
-
+  console.log('to', to)
+  if (to.name === 'oauth') {
+    VueCookies.set('oauth', true, "12h")
+  }
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
     if (VueCookies.get('token') || to.params.token) {

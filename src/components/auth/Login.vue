@@ -48,8 +48,16 @@
       </v-form>
     <v-divider>
     </v-divider>
-    <GOAuth />
-    <FBOAuth />
+    <OAuth
+      id="google"
+      name="Google"
+      icon="mdi-google"
+    />
+    <OAuth
+      id="facebook"
+      name="Facebook"
+      icon="mdi-facebook"
+    />
     <v-divider>
     </v-divider>
     <router-link to="/forgotpassword">
@@ -76,16 +84,15 @@
 <script>
 import Card from '@/components/Card.vue'
 import authService from '@/services/auth-service.js'
-import GOAuth from '@/components/auth/GOAuth.vue'
-import FBOAuth from '@/components/auth/FBOAuth.vue'
+
+import OAuth from '@/components/auth/OAuth.vue'
+
 import { bus } from '@/main.js'
 
 export default {
     components: {
       Card,
-      GOAuth,
-      FBOAuth,
-
+      OAuth,
     },
     data: () => ({
       loginSuccess: false,
@@ -104,14 +111,22 @@ export default {
       errorMessage: '',
     }),
     created() {
-      bus.$on('loginSuccess', (event) => {
+      bus.$on('loginSuccess', () => {
         this.loginSuccess = true
-        console.log(event)
       }) 
-      bus.$on('loginFailure', (event) => {
-        console.log(event)
+      bus.$on('loginFailure', () => {
         this.loginFailure = true
-      }) 
+      })
+
+      console.log(this.$route.query)
+      if (this.$route.query) {
+        if ('success' in this.$route.query) {
+          if (this.$route.query.success === 'false') {
+            this.errorMessage = this.$route.query.error
+            this.loginFailure = true
+          }
+        }
+      }
     },
     methods: {
       async validate () {
