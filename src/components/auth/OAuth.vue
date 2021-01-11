@@ -2,6 +2,7 @@
   <v-container>
       <v-btn
         block
+        :loading="loading"
         :disabled="!valid"
         color="indigo"
         outlined
@@ -43,6 +44,7 @@ export default {
     name: String,
   },
   data: () => ({
+    loading: false,
     valid: true,
     registerSuccess: false,
     registerFailure: false,
@@ -59,12 +61,14 @@ export default {
     },
   methods: {
     async validate () {
+      this.loading = true
       const response = await authService.oAuthLogin(this.$props.id)
       if (response.success) {
-        
+        this.loading = false 
         window.location.replace(response.data.loginUrl)
         bus.$emit('registerSuccess', response)
       } else {
+        this.loading = false 
         bus.$emit('registerFailure', {})
         this.valid = !this.valid
       }

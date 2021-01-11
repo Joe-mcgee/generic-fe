@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies'
-console.log(VueCookies)
 
 import Home from '@/views/Home.vue'
 import Dashboard from '@/views/Dashboard.vue'

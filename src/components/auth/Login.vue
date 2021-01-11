@@ -36,6 +36,7 @@
         </v-text-field>
         <v-btn
           :disabled="!valid"
+          :loading="loading"
           color="success"
           class="mr-4"
           @click="validate"
@@ -109,6 +110,7 @@ export default {
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
       errorMessage: '',
+      loading: false,
     }),
     created() {
       bus.$on('loginSuccess', () => {
@@ -118,7 +120,6 @@ export default {
         this.loginFailure = true
       })
 
-      console.log(this.$route.query)
       if (this.$route.query) {
         if ('success' in this.$route.query) {
           if (this.$route.query.success === 'false') {
@@ -131,16 +132,18 @@ export default {
     methods: {
       async validate () {
         if (this.$refs.form.validate()) {
-          
+          this.loading = true
           const data = {
             email: this.$data.email,
             password: this.$data.password,
           }
           const response = await authService.login(data)
           if (response.success) {
+            this.loading = false
             bus.$emit('loginSuccess', response)
             this.$router.push({name: 'dashboard', params: {'token':response.token}})
           } else {
+            this.loading = false
             this.errorMessage = response.error
             bus.$emit('loginFailure', {})
             this.$data.valid = !this.valid

@@ -49,6 +49,7 @@
       </v-text-field>
     <v-btn
       block
+      :loading="loading"
       :disabled="!valid"
       color="success"
       class="mr-4"
@@ -91,6 +92,7 @@ export default {
     Card
   },
   data: () => ({
+    loading: false,
     password: '',
     rePassword: '',
     show1: false,
@@ -123,21 +125,23 @@ export default {
   methods: {
     async validate() {
       if (this.$refs.form.validate()) {
+        this.loading = true
         const data = {
           resettoken: this.$route.params.resettoken,
           password: this.password
         }
         const response = await authService.resetPassword(data)
           if (response.success) {
+            this.loading = false
             bus.$emit('resetPasswordSuccess', response)
             this.$router.push('/resetpasswordsuccess')
             
           } else {
+            this.loading = false
             this.errorMessage = response.error
             bus.$emit('resetPasswordFailure', response)
 
           }
-          bus.$emit('resetPasswordFailure', response)
       }
     }
   }

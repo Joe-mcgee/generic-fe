@@ -32,6 +32,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
+            :loading="loading"
             color="error"
             text
             @click="validate"
@@ -74,6 +75,7 @@ import { bus } from '@/main.js'
       deleteSuccess: false,
       deleteFailure: false,
       valid: true,
+      loading: false
     }),
     async created() {
       bus.$on('deleteSuccess', (event) => {
@@ -91,6 +93,7 @@ import { bus } from '@/main.js'
     },
     methods: {
       async validate () {
+          this.loading = true
           let response
           try {
             console.log(this.userId)
@@ -99,7 +102,7 @@ import { bus } from '@/main.js'
             }
             response = await authService.deleteUser(data)
           } catch (e) {
-
+            this.loading = false
             bus.$emit('deleteFailure', {})
             this.valid = !this.valid
             console.log(e)
@@ -107,6 +110,7 @@ import { bus } from '@/main.js'
           }
 
           if (response.success) {
+            this.loading = false
             bus.$emit('deleteSuccess', response)
             this.$router.push('/login')
           }

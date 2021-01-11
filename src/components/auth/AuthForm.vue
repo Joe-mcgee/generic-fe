@@ -13,7 +13,7 @@
         :rules="nameRules"
         label="Name"
         required
-        >{{name.length >= 1 ? name : '' }}</v-text-field>
+        ></v-text-field>
 
       <v-text-field
         v-if="showEmail"
@@ -22,7 +22,7 @@
         label="E-mail"
         counter
         required
-        >{{email.length >= 1 ? email : ''}}</v-text-field>
+        ></v-text-field>
 
 
       <v-text-field
@@ -110,6 +110,7 @@
       <v-btn
         block
         :disabled="!valid"
+        :loading="loading"
         color="success"
         class="mr-4"
         @click="validate"
@@ -141,6 +142,7 @@ import { bus } from '@/main.js'
     },
     data: () => ({
       title: '',
+      loading: false,
       modeOptions: {
         REGISTER: 'register',
         EDITPROFILE: 'me',
@@ -202,6 +204,8 @@ import { bus } from '@/main.js'
           this.title = 'Register'
           break
         case 'me':
+          this.name = 'Loading...'
+          this.email = 'Loading...'
           this.showName = true
           this.showEmail = true
           this.title = 'Update Profile'
@@ -213,6 +217,7 @@ import { bus } from '@/main.js'
           }
           break
         case 'oauth-me':
+          this.name = 'Loading...'
           this.showName = true
           this.title = 'Update Profile'
           response = await authService.getMe()
@@ -238,7 +243,7 @@ import { bus } from '@/main.js'
     methods: {
       async validate () {
         if (this.$refs.form.validate()) {
-          
+          this.loading = true
           let response
           let data
             switch (this.$props.mode) {
@@ -251,10 +256,12 @@ import { bus } from '@/main.js'
                 }
                 response = await authService.register(data)
                 if (response.success) {
+                  this.loading = false
                   this.successMessage = 'Registration Successful'
                   bus.$emit('registerSuccess', response)
                   this.$router.replace('/registersuccess')
                 } else {
+                  this.loading = false
                   this.errorMessage = response.error
                   bus.$emit('registerFailure', {})
                   this.$data.valid = !this.valid
@@ -268,11 +275,12 @@ import { bus } from '@/main.js'
                 }
                 response = await authService.updateDetails(data)
                 if (response.success) {
-
+                  this.loading = false
                   this.successMessage = 'Profile Update Successful'
                   this.registerSuccess = true
                   bus.$emit('update-profile', response.data)
                 } else {
+                  this.loading = false
                   this.errorMessage = response.error
                   bus.$emit('registerFailure', {})
                   this.valid = !this.valid
@@ -286,11 +294,12 @@ import { bus } from '@/main.js'
                 }
                 response = await authService.updateDetails(data)
                 if (response.success) {
-
+                  this.loading = false
                   this.successMessage = 'Profile Update Successful'
                   this.registerSuccess = true
                   bus.$emit('update-profile', response.data)
                 } else {
+                  this.loading = false
                   this.errorMessage = response.error
                   bus.$emit('registerFailure', {})
                   this.$data.valid = !this.valid
@@ -305,8 +314,10 @@ import { bus } from '@/main.js'
                 response = await authService.updatePassword(data)
                 this.successMessage = 'Update Password Successful'
                 if (response.success) {
+                  this.loading = false
                   this.registerSuccess = true
                 } else {
+                  this.loading = false
                   this.errorMessage = response.error
                   bus.$emit('registerFailure', {})
                   this.$data.valid = !this.valid

@@ -1,5 +1,7 @@
 import http from "@/services/http-common.js"
 import VueCookies from 'vue-cookies'
+import { bus } from '@/main.js'
+
 class AuthService {
   async oAuthLogin(provider) {
     //google
@@ -31,8 +33,8 @@ class AuthService {
       return e.response.data
     }
     if (response.data.success == true) {
-      console.log('cookie set')
       VueCookies.set('token', response.data.token, "12h")
+      bus.$emit('cookie-set', {})
     }
     return response.data
   }

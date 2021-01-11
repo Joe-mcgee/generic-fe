@@ -46,7 +46,31 @@
 
       <v-toolbar-title>Generic Front End</v-toolbar-title>
       <v-spacer></v-spacer>
-      <Logout />
+      <p
+        class="subtitle-1 d-none mb-0 pr-3 d-sm-inline"
+        v-if="name"
+      >
+      {{name}}
+      </p>
+      <v-progress-linear
+        v-else
+        indeterminate
+        color="green"
+        style="width: 62px;"
+        class="mr-3"
+        >
+      </v-progress-linear>
+      <v-btn
+        :loading="loading"
+        icon
+        large
+        outlined
+        @click="logout"
+        >
+        <v-icon>
+          mdi-logout
+        </v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -57,11 +81,19 @@
 </template>
 
 <script>
-import Logout from '@/components/auth/Logout.vue'
+import authService from '@/services/auth-service.js'
+import { bus } from '@/main.js'
+import VueCookies from 'vue-cookies'
 export default {
   name: 'App',
-  components: {
-    Logout,
+  async created() {
+    bus.$on('cookie-set', () => {
+      console.log('caught cookie event')
+      this.hasCookie = true
+    })
+    if (VueCookies.get('token')) {
+      this.hasCookie = true
+    }
   },
   computed: {
     showNavigation() {
@@ -92,10 +124,24 @@ export default {
           return false
       }
       return true
-    }
+    },
+  },
+  watch: {
+    hasCookie: async function (val) {
+      console.log(val)
+      const response = await authService.getMe()
+      if (response.success == true) {
+        this.name = response.data.name
+      } else {
+        this.name = ''
+      }
+    },
   },
   data: () => ({
+    hasCookie: false,
     drawer: null,
+    name: '',
+    loading: false,
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
       { title: 'Settings', icon: 'mdi-account-cog', link: '/settings' },
@@ -107,6 +153,13 @@ export default {
       if (this.$router.currentRoute.name !== link) {
         this.$router.replace(link)
       }
+    },
+    async logout() {
+      console.log('trigger')
+      this.loading = true
+      await authService.logout()
+      this.loading = false
+      this.$router.replace('/login')
     }
   }
 };
