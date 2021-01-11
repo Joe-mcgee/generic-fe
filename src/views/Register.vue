@@ -3,6 +3,13 @@
     title="Register"
     >
     <AuthForm mode="register"/>
+    <v-divider>
+    </v-divider>
+      <p class="text-center pa-3">
+      <router-link to="/login">
+        Login
+      </router-link>
+      </p>
   </Card>
 </template>
 

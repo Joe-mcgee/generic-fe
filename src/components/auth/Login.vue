@@ -60,11 +60,11 @@
     />
     <v-divider>
     </v-divider>
-    <router-link to="/forgotpassword">
       <p class="text-center pa-3">
+        <router-link to="/forgotpassword">
           Forgot Password?
+        </router-link>
       </p>
-    </router-link>
     <v-snackbar
       v-model="loginSuccess"
       top
