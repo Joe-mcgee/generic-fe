@@ -37,42 +37,9 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar
+    <AppBar
       v-if="showNavigation"
-      app
-      >
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Generic Front End</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <p
-        class="subtitle-1 d-none mb-0 pr-3 d-sm-inline"
-        v-if="name"
-      >
-      {{name}}
-      </p>
-      <v-progress-linear
-        v-else
-        indeterminate
-        color="green"
-        style="width: 62px;"
-        class="mr-3"
-        >
-      </v-progress-linear>
-      <v-btn
-        :loading="loading"
-        icon
-        large
-        outlined
-        @click="logout"
-        >
-        <v-icon>
-          mdi-logout
-        </v-icon>
-      </v-btn>
-    </v-app-bar>
-
+      />
     <v-main>
       <!--  -->
       <router-view :key="$route.fullPath"></router-view>
@@ -81,19 +48,26 @@
 </template>
 
 <script>
-import authService from '@/services/auth-service.js'
+import AppBar from '@/components/AppBar.vue'
 import { bus } from '@/main.js'
-import VueCookies from 'vue-cookies'
 export default {
   name: 'App',
-  async created() {
-    bus.$on('cookie-set', () => {
-      console.log('caught cookie event')
-      this.hasCookie = true
+  components: {
+    AppBar
+  },
+  data: () => ({
+    hasCookie: false,
+    drawer: null,
+    items: [
+      { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+      { title: 'Settings', icon: 'mdi-account-cog', link: '/settings' },
+    ],
+    //
+  }),
+  created() {
+    bus.$on('toggle-drawer', () => {
+      this.drawer = !this.drawer
     })
-    if (VueCookies.get('token')) {
-      this.hasCookie = true
-    }
   },
   computed: {
     showNavigation() {
@@ -126,41 +100,12 @@ export default {
       return true
     },
   },
-  watch: {
-    hasCookie: async function (val) {
-      console.log(val)
-      const response = await authService.getMe()
-      if (response.success == true) {
-        this.name = response.data.name
-      } else {
-        this.name = ''
-      }
-    },
-  },
-  data: () => ({
-    hasCookie: false,
-    drawer: null,
-    name: '',
-    loading: false,
-    items: [
-      { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
-      { title: 'Settings', icon: 'mdi-account-cog', link: '/settings' },
-    ],
-    //
-  }),
   methods: {
     go(link) {
       if (this.$router.currentRoute.name !== link) {
         this.$router.replace(link)
       }
     },
-    async logout() {
-      console.log('trigger')
-      this.loading = true
-      await authService.logout()
-      this.loading = false
-      this.$router.replace('/login')
-    }
   }
 };
 </script>
