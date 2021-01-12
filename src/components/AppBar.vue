@@ -20,7 +20,7 @@
         <v-list-item-title
           class="title text-right">
           <span
-            v-if="name"
+            v-if="!nameLoading"
             >{{name}}</span> 
           <v-progress-linear
             v-else
@@ -34,7 +34,7 @@
       <v-list-item-subtitle
         class="text-right"
         >
-        <span v-if="email">{{email}}</span>
+        <span v-if="!emailLoading">{{email}}</span>
         <v-progress-linear
           v-else
           indeterminate
