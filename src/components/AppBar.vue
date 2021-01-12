@@ -14,7 +14,7 @@
     <v-spacer></v-spacer>
     
     <v-list-item
-      style="max-width:250px"
+      style="max-width:233px"
       >
       <v-list-item-content>
         <v-list-item-title
@@ -35,13 +35,6 @@
         class="text-right"
         >
         <span v-if="!emailLoading">{{email}}</span>
-        <v-progress-linear
-          v-else
-          indeterminate
-          color="green"
-          class="mr-3"
-          >
-        </v-progress-linear>
       </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
