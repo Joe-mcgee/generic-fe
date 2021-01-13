@@ -125,11 +125,10 @@
         {{ successMessage }}
       </v-snackbar>
       <v-snackbar
+        v-model="registerFailure"
         color="red"
         top
-        v-model="registerFailure"
-        >
-        {{ errorMessage }}
+        >{{ errorMessage }}
       </v-snackbar>
     </v-form>
 </template>
@@ -187,7 +186,9 @@ import { bus } from '@/main.js'
       bus.$on('registerSuccess', () => {
         this.registerSuccess = true
       }) 
-      bus.$on('registerFailure', () => {
+      bus.$on('register-failure', (msg) => {
+        console.log(msg)
+        this.errorMessage = msg
         this.registerFailure = true
       })
       
@@ -282,7 +283,7 @@ import { bus } from '@/main.js'
                 } else {
                   this.loading = false
                   this.errorMessage = response.error
-                  bus.$emit('registerFailure', {})
+                  bus.$emit('register-failure', response.error)
                   this.valid = !this.valid
                   this.$refs.form.resetValidation()
                 }

@@ -103,6 +103,7 @@ class AuthService {
         }
       })
     } catch (e) {
+      console.log(e)
       return e.response.data
     }
     return response.data

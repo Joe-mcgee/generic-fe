@@ -17,26 +17,10 @@
       </v-icon>
         Login with {{name}}
       </v-btn>
-
-    <v-snackbar
-      v-model="registerSuccess"
-      top
-      color="green"
-      >
-      {{name}} Auth Success
-    </v-snackbar>
-    <v-snackbar
-      color="red"
-      top
-      v-model="registerFailure"
-      >
-      {{name}} Auth fail
-    </v-snackbar>
   </v-container>
 </template>
 <script>
 import authService from '@/services/auth-service.js'
-import { bus } from '@/main.js'
 export default {
   props: {
     id: String,
@@ -49,16 +33,6 @@ export default {
     registerSuccess: false,
     registerFailure: false,
   }),
-    created() {
-      bus.$on('registerSuccess', (event) => {
-        this.loginSuccess = true
-        console.log(event)
-      }) 
-      bus.$on('registerFailure', (event) => {
-        console.log(event)
-        this.loginFailure = true
-      }) 
-    },
   methods: {
     async validate () {
       this.loading = true
@@ -66,10 +40,8 @@ export default {
       if (response.success) {
         this.loading = false 
         window.location.replace(response.data.loginUrl)
-        bus.$emit('registerSuccess', response)
       } else {
         this.loading = false 
-        bus.$emit('registerFailure', {})
         this.valid = !this.valid
       }
 
