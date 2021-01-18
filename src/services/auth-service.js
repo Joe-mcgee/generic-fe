@@ -1,5 +1,6 @@
 import http from "@/services/http-common.js"
 import VueCookies from 'vue-cookies'
+import jwt_decode from 'jwt-decode'
 import { bus } from '@/main.js'
 
 class AuthService {
@@ -33,8 +34,12 @@ class AuthService {
       return e.response.data
     }
     if (response.data.success == true) {
-      VueCookies.set('token', response.data.token, "12h")
+      let decoded = jwt_decode(response.data.token)
+      VueCookies.set('role', decoded.role, "30d")
+      VueCookies.set('token', response.data.token, "30d")
       bus.$emit('cookie-set', {})
+      response.data.decoded = decoded
+      
     }
     return response.data
   }
@@ -71,6 +76,7 @@ class AuthService {
     if (response.data.success == true) {
       VueCookies.remove('token')
       VueCookies.remove('oauth')
+      VueCookies.remove('role')
     }
     return response.data
   }

@@ -141,7 +141,11 @@ export default {
           if (response.success) {
             this.loading = false
             bus.$emit('loginSuccess', response)
-            this.$router.push({name: 'dashboard', params: {'token':response.token}})
+            if (response.decoded.role === 'admin') {
+              this.$router.push({name: 'admin'})
+            } else {
+              this.$router.push({name: 'dashboard', params: {'token':response.token}})
+            }
           } else {
             this.loading = false
             this.errorMessage = response.error

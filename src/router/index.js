@@ -127,7 +127,7 @@ const routes = [
     component: Admin,
     meta: {
       requiresAuth: true,
-      is_admin: true,
+      isAdmin: true,
     }
   },
   {
@@ -156,7 +156,6 @@ const router = new VueRouter({
 
 
 router.beforeEach( (to, from, next) => {
-  console.log('to', to)
   if (to.name === 'oauth') {
     VueCookies.set('oauth', true, "12h")
   }
